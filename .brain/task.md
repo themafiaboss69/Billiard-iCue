@@ -50,10 +50,10 @@
   - [x] Implement Procedural Cue Stick (Lerp/Easing)
   - [x] Implement True-Roll Ball Rotation (Quaternions, $v=r\omega$)
   - [x] Implement VFX Object Pool (Chalk Dust, Sparks)
-- [x] UI & Physics Refinement (v14)
-  - [x] Add Distance Presets (NEAR, MED, FAR)
-  - [x] Implement Dynamic Top-View Zoom (Auto-framing)
-  - [x] Stack Aim menu vertically for clarity
+- [x] Tournament Refinement (v15)
+  - [x] Elongate table to 30x15 (Professional length)
+  - [x] Fix cue stick taper (Seamless shaft-to-ferrule)
+  - [x] Recalibrate Near/Med/Far for larger table
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository
