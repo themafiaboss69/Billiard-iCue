@@ -24,3 +24,8 @@
 - [x] Verification
   - [x] Test the interface on mobile dimensions
   - [x] Verify physics logic
+- [x] Deployment & Sync
+  - [x] Initialize Git repository
+  - [x] Create private GitHub repository "Billiard-iCue"
+  - [x] Include artifacts in the repository (`.brain/` folder)
+  - [x] Push initial commit to GitHub

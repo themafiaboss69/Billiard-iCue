@@ -4,6 +4,7 @@
 I've implemented the V1 Billiard physics guide using Vanilla JavaScript and **Three.js**. Because `npm` was unavailable in the current terminal state, I bypassed the Vite setup and built it purely using HTML/JS/CSS with Three.js imported via CDNs. This makes the app incredibly portable and easy to run anywhere.
 
 ### Features
+0. **GitHub Repository**: The code and artifacts are synced to a private repository: [Billiard-iCue](https://github.com/themafiaboss69/Billiard-iCue.git)
 1. **Dual-Screen Layout**: 
    - The top half of the screen displays the 3D first-person view behind the cue ball.
    - The bottom half displays a top-down, 2D-style orthographic view.
