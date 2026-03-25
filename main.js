@@ -535,9 +535,9 @@ document.getElementById('english-center').onclick = () => {
     updateEnglishUI(); 
 };
 
-document.getElementById('aim-left').onclick = () => { aimAngle += 0.01; updateTrajectory(); }
+document.getElementById('aim-left').onclick = () => { aimAngle -= 0.01; updateTrajectory(); }
 document.getElementById('aim-center').onclick = () => { aimAngle = 0; updateTrajectory(); }
-document.getElementById('aim-right').onclick = () => { aimAngle -= 0.01; updateTrajectory(); }
+document.getElementById('aim-right').onclick = () => { aimAngle += 0.01; updateTrajectory(); }
 
 document.getElementById('reset-button').onclick = () => {
     isShooting = false;
