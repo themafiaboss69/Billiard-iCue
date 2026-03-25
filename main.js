@@ -4,7 +4,7 @@ import * as THREE from 'three';
 let aimAngle = 0; // Radians
 let english = { x: 0, y: 0 }; // Normalized -1 to 1
 let power = 50;
-const ballRadius = 0.5;
+const ballRadius = 0.6;
 const tableWidth = 15;
 const tableLength = 30;
 
@@ -136,21 +136,21 @@ const cueStick = new THREE.Group();
 
 // 1. Shaft (Tapered wood) - Thinner end (0.04) meets ferrule
 const shaftGeo = new THREE.CylinderGeometry(0.08, 0.04, 14.5, 12);
-shaftGeo.translate(0, 8.0, 0); 
+shaftGeo.translate(0, 8.1, 0); 
 const shaftMat = new THREE.MeshBasicMaterial({ color: 0xc2a376 });
 const shaft = new THREE.Mesh(shaftGeo, shaftMat);
 cueStick.add(shaft);
 
-// 2. Ferrule (White) - Unified width 0.04
+// 2. Ferrule (White)
 const ferruleGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.2, 12);
-ferruleGeo.translate(0, 0.65, 0); 
+ferruleGeo.translate(0, 0.75, 0); 
 const ferruleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
 const ferrule = new THREE.Mesh(ferruleGeo, ferruleMat);
 cueStick.add(ferrule);
 
-// 3. Tip (Blue) - Unified width 0.04
+// 3. Tip (Blue)
 const tipGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.1, 12);
-tipGeo.translate(0, 0.55, 0); 
+tipGeo.translate(0, 0.65, 0); 
 const tipMat = new THREE.MeshBasicMaterial({ color: 0x335588 });
 const tip = new THREE.Mesh(tipGeo, tipMat);
 cueStick.add(tip);
@@ -440,8 +440,7 @@ function updateCameras() {
     const centerZ = (cueBall.position.z + objBall.position.z) / 2;
     const centerX = (cueBall.position.x + objBall.position.x) / 2;
     
-    const verticalNeeded = Math.max(12, dist + 6); 
-    const halfV = verticalNeeded / 2;
+    const verticalNeeded = Math.max(12, dist + 8); // Slightly more padding for larger balls    const halfV = verticalNeeded / 2;
     const aspect = window.innerWidth / (window.innerHeight / 2);
     const halfH = Math.max(6, halfV * aspect);
     
