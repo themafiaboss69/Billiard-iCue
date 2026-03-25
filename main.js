@@ -194,6 +194,7 @@ function updateTrajectory() {
         ghostBall.visible = true;
         
         // --- Object Ball Physics (SIT, CIT, CIT-Deviation) ---
+        const effectiveAimDir = currentPreVelocity.clone().normalize();
         const collisionNormal = new THREE.Vector3().subVectors(objBall.position, ghostPos).normalize();
         
         // 1. Collision-Induced Throw (CIT): Friction towards the cue ball's tangent

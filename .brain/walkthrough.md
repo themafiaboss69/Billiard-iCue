@@ -16,6 +16,14 @@ I've implemented the V1 Billiard physics guide using Vanilla JavaScript and **Th
    - **Yellow Line**: The object ball's trajectory. This line now includes **Spin-Induced Throw**. If you apply Left English, the object ball will be slightly thrown to the right of the collision normal, and vice-versa.
    - **Red Line**: The post-impact tangent line for the cue ball. When you apply Top English (Follow), this red line curves gracefully forward. When you apply Bottom English (Draw), it curves backward. Left and right english also slightly affect throw angles.
 
+### Expert Physics & Targeting
+4. **Pocket Targeting**: Tap any of the 6 pocket markers on the table. The app will automatically calculate the **Ghost Ball** position required to pot the ball and align your cue exactly!
+5. **Advanced Physics (SIT & CIT)**:
+   - **CIT (Collision-Induced Throw)**: Includes the physics of friction between balls, deviating the object ball slightly in the direction of the hit.
+   - **SIT (Spin-Induced Throw)**: English side-spin now physically "throws" the object ball in the opposite direction.
+   - **Throw Vectors**: Enable the "Show Throw Vectors" toggle to see the difference between the "Natural Path" (line of centers) and the "Actual Path" (including throw).
+6. **Speed Transfer**: The lines now dynamically scale their length based on the cut angle—thin cuts result in much slower object ball speeds, exactly matching the $\cos(\theta)$ energy transfer rule.
+
 ## How to Verify
 A local development server is currently running.
 
