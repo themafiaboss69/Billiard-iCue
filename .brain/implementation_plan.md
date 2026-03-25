@@ -68,7 +68,27 @@ To ensure high performance and low thermal load on mobile, we will transition to
 - **Resolution Scaling**: `renderer.setPixelRatio` will be clamped: `Math.min(window.devicePixelRatio, 1080 / Math.max(window.innerWidth, window.innerHeight))`.
 - **Batching**: Use shared `MeshBasicMaterial` instances to minimize state changes.
 
+## Shot Animation (Execution)
+To bring the simulation to life, we will animate the balls along the pre-calculated paths:
+
+### 1. Pre-Collision Animation
+- **Trigger**: Click "SHOOT".
+- **Movement**: Move the `cueBall` group index-by-index through the `aimLinePoints` array.
+- **Speed**: Controlled by `power`.
+
+### 2. Collision Event
+- **Detection**: When the `cueBall` reachers `ghostPos`.
+- **Action**:
+  - Start the `objBall` movement along its predicted path.
+  - Continue `cueBall` movement through the `cuePathPoints` (curved path).
+
+### 3. State Management
+- **Aiming State**: Normal interaction mode (default).
+- **Shooting State**: Balls are moving. Disable aim/spin adjustments.
+- **Finished State**: Balls have stopped. Show final positions. `RESET` clears the state.
+
 ## Verification Plan
-1. Confirm the scene renders without any lights (all materials should be `MeshBasic` or `MeshMatcap`).
-2. Verify blob shadows move smoothly under balls.
-3. Check performance on a mobile device (low GPU usage).
+1. Click "SHOOT" and verify the cue ball hits the object ball as intended.
+2. Confirm the object ball follows the yellow line and the cue ball follows the red curve.
+3. Verify that English effects (Draw/Follow) are visible in the movement.
+4. Test that the "RESET" button correctly restores the table for the next shot.

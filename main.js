@@ -214,8 +214,18 @@ function autoAimToPocket(pocketPos) {
     updateTrajectory();
 }
 
+let isShooting = false;
+let shotProgress = 0;
+let shotData = {
+    cuePrePoints: [],
+    cuePostPoints: [],
+    objPoints: []
+};
+
 // --- Math & Trajectory Calculation ---
 function updateTrajectory() {
+    if (isShooting) return; // Don't recalculate while animating
+
     const aimDir = new THREE.Vector3(Math.sin(aimAngle), 0, -Math.cos(aimAngle)).normalize();
     const up = new THREE.Vector3(0, 1, 0);
     const powerFactor = power / 50.0;
@@ -299,11 +309,20 @@ function updateTrajectory() {
         const cosTheta = Math.abs(effectiveAimDir.dot(collisionNormal));
         const vObjPost = vCuePre * cosTheta;
         
-        objPathEnd.copy(objBall.position).addScaledVector(objDir, 10 * (vObjPost / 2.0));
-        objLineObj.geometry.setFromPoints([
-            new THREE.Vector3(objBall.position.x, ballRadius, objBall.position.z),
-            new THREE.Vector3(objPathEnd.x, ballRadius, objPathEnd.z)
-        ]);
+        let objPathPoints = [objBall.position.clone()];
+        let currentObjPos = objBall.position.clone();
+        let currentObjVel = objDir.clone().multiplyScalar(vObjPost);
+        for (let i = 0; i < 100; i++) {
+            currentObjPos.addScaledVector(currentObjVel, 0.5);
+            objPathPoints.push(currentObjPos.clone());
+            currentObjVel.multiplyScalar(0.95);
+            if (currentObjVel.lengthSq() < 0.001) break;
+        }
+        
+        objLineObj.geometry.setFromPoints(objPathPoints.map(p => new THREE.Vector3(p.x, ballRadius, p.z)));
+        
+        shotData.cuePrePoints = aimLinePoints;
+        shotData.objPoints = objPathPoints;
         
         // Debug Vectors
         if (showThrowVectors) {
@@ -346,6 +365,8 @@ function updateTrajectory() {
             if (currentVelocity.lengthSq() < 0.001 && spinForce.lengthSq() < 0.001) break;
             cuePathPoints.push(currentPos.clone());
         }
+        shotData.cuePostPoints = cuePathPoints;
+        
         if (cuePathPoints.length === 1) cuePathPoints.push(ghostPos.clone().add(new THREE.Vector3(0,0.01,0)));
         cueLineObj.geometry.setFromPoints(cuePathPoints.map(p => new THREE.Vector3(p.x, ballRadius, p.z)));
     } else {
@@ -464,26 +485,79 @@ document.getElementById('aim-center').onclick = () => { aimAngle = 0; updateTraj
 document.getElementById('aim-right').onclick = () => { aimAngle -= 0.01; updateTrajectory(); }
 
 document.getElementById('reset-button').onclick = () => {
-    cueBall.position.set(0, ballRadius, tableLength/4);
-    objBall.position.set(0, ballRadius, -tableLength/4);
+    isShooting = false;
+    shotProgress = 0;
+    
+    cueBall.position.set(0, 0, tableLength/4);
+    objBall.position.set(0, 0, -tableLength/4);
     aimAngle = 0;
     english = { x: 0, y: 0 };
     document.getElementById('power-slider').value = 50;
     power = 50;
+    
+    // Restore line visibility
+    aimLineObj.visible = true;
+    objLineObj.visible = true;
+    cueLineObj.visible = true;
+    
     updateEnglishUI();
     updateTrajectory();
 };
 
 document.getElementById('shoot-button').onclick = () => {
-    // In V1, 'Shoot' could animate the spheres. For now, it simply randomizes the next shot 
-    // or can be hooked up to an animation loop.
-    alert(`Shot executed! Power: ${power}, Spin: (${english.x}, ${english.y})`);
+    if (isShooting) return;
+    isShooting = true;
+    shotProgress = 0;
+    // Hide prediction lines during shot
+    aimLineObj.visible = false;
+    objLineObj.visible = false;
+    cueLineObj.visible = false;
+    ghostBall.visible = false;
 };
 
 // --- Render Loop ---
 function animate() {
     requestAnimationFrame(animate);
     
+    if (isShooting) {
+        shotProgress += 1.0; // Fixed timestep for animation
+        const cuePreLen = shotData.cuePrePoints.length;
+        const cuePostLen = shotData.cuePostPoints.length;
+        const objLen = shotData.objPoints.length;
+        
+        // Phase 1: Cue Ball Pre-collision
+        if (shotProgress < cuePreLen) {
+            const p = shotData.cuePrePoints[Math.floor(shotProgress)];
+            cueBall.position.set(p.x, 0, p.z);
+        } else {
+            // Phase 2: Post-collision
+            const postIdx = Math.floor(shotProgress - cuePreLen);
+            
+            // Move Cue Ball
+            if (postIdx < cuePostLen) {
+                const p = shotData.cuePostPoints[postIdx];
+                cueBall.position.set(p.x, 0, p.z);
+            }
+            
+            // Move Object Ball
+            if (postIdx < objLen) {
+                const p = shotData.objPoints[postIdx];
+                objBall.position.set(p.x, 0, p.z);
+            }
+            
+            // End animation
+            if (postIdx >= cuePostLen && postIdx >= objLen) {
+                isShooting = false;
+                // Keep balls at final position and show prediction lines from new positions
+                aimLineObj.visible = true;
+                objLineObj.visible = true;
+                cueLineObj.visible = true;
+                ghostBall.visible = true;
+                updateTrajectory();
+            }
+        }
+    }
+
     const width = window.innerWidth;
     const height = window.innerHeight;
     const halfH = height / 2;

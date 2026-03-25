@@ -34,13 +34,18 @@
   - [x] Redesign 3D table with rails (cushions) and pockets
   - [x] Adjust table to 2:1 aspect ratio
   - [x] Fix Fine Tune Aim UI placement and styling
-- [ ] GPU Optimization (Mobile)
-  - [ ] Implement Resolution Scaling (Max 1080p pixel ratio)
-  - [ ] Disable all Real-Time Lights
-  - [ ] Use Baked 'Unlit' Materials for table (MeshBasicMaterial)
-  - [ ] Implement Blob Shadows for balls (Sprite-based)
-  - [ ] Implement Matcap Reflections for balls (Fake specular)
-  - [ ] Implement Texture Batching (Atlas simulation)
+- [x] GPU Optimization (Mobile)
+  - [x] Implement Resolution Scaling (Max 1080p pixel ratio)
+  - [x] Disable all Real-Time Lights
+  - [x] Use Baked 'Unlit' Materials for table (MeshBasicMaterial)
+  - [x] Implement Blob Shadows for balls (Sprite-based)
+  - [x] Implement Matcap Reflections for balls (Fake specular)
+  - [x] Implement Texture Batching (Atlas simulation)
+- [ ] Shot Animation
+  - [ ] Implement animation state machine (Aiming -> Shooting -> Finished)
+  - [ ] Animate Cue Ball along pre-collision path
+  - [ ] Trigger collision animation (Object Ball movement)
+  - [ ] Animate Cue Ball curve and Object Ball throw path
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository
