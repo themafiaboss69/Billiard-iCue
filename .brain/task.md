@@ -50,10 +50,10 @@
   - [x] Implement Procedural Cue Stick (Lerp/Easing)
   - [x] Implement True-Roll Ball Rotation (Quaternions, $v=r\omega$)
   - [x] Implement VFX Object Pool (Chalk Dust, Sparks)
-- [x] UI & Physics Refinement (v13)
+- [x] UI & Physics Refinement (v14)
   - [x] Add Distance Presets (NEAR, MED, FAR)
+  - [x] Implement Dynamic Top-View Zoom (Auto-framing)
   - [x] Stack Aim menu vertically for clarity
-  - [x] Move Throw Vector toggle below buttons
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository

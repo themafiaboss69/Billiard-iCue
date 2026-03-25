@@ -8,10 +8,11 @@ I've implemented the V1 Billiard physics guide using Vanilla JavaScript and **Th
    - The table now features a proper **2:1 aspect ratio** (standard for pool).
    - Added **3D Wood Rails** (cushions) that create a physical boundary for the scene.
    - Includes **Pockets** and the **Head Spot** marking for authentic alignment.
-2. **Optimized UI Layout (v14)**:
-   - **Dynamic Top-View Zoom**: The top-down orthographic camera now **automatically zooms out** when the cue ball is moved to the FAR preset, ensuring both balls are perfectly framed at all times.
-   - **Distance Presets**: Rapidly switch between **NEAR**, **MED**, and **FAR** positions for targeted practice.
-   - **Cache Fix**: Bumped the version to `v=14` to force-load the new camera logic and distance presets.
+2. **Optimized UI Layout (v15)**:
+   - **Elongated Table**: The table has been resized to **30x15** for a longer, more professional tournament look.
+   - **Seamless Cue Stick**: The wood shaft taper has been fixed; it is now perfectly flush with the white ferrule and tip.
+   - **Dynamic Top-View Zoom**: The top-down camera automatically adjusts to frame both balls regardless of distance.
+   - **Cache Fix**: Bumped the version to `v=15` to force-load the new table dimensions and cue stick geometry.
    - **Action Buttons**: `RESET` (top-left) and `SHOOT` (bottom-right) are ergonomically placed.
 ### Mobile GPU Optimization (v5)
 3. **High-Fidelity Rendering (Light-Free)**:

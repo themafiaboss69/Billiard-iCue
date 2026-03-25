@@ -5,8 +5,8 @@ let aimAngle = 0; // Radians
 let english = { x: 0, y: 0 }; // Normalized -1 to 1
 let power = 50;
 const ballRadius = 0.5;
-const tableWidth = 10;
-const tableLength = 20;
+const tableWidth = 15;
+const tableLength = 30;
 
 // --- Three.js Setup ---
 const container = document.getElementById('canvas-container');
@@ -134,8 +134,8 @@ const objBall = objBallObj.group;
 // --- Procedural 3D Cue Stick (Detailed) ---
 const cueStick = new THREE.Group();
 
-// 1. Shaft (Tapered wood)
-const shaftGeo = new THREE.CylinderGeometry(0.04, 0.08, 14.5, 12);
+// 1. Shaft (Tapered wood) - Thinner end (0.04) meets ferrule
+const shaftGeo = new THREE.CylinderGeometry(0.08, 0.04, 14.5, 12);
 shaftGeo.translate(0, 8.0, 0); 
 const shaftMat = new THREE.MeshBasicMaterial({ color: 0xc2a376 });
 const shaft = new THREE.Mesh(shaftGeo, shaftMat);
@@ -554,17 +554,17 @@ document.getElementById('aim-left').onclick = () => { aimAngle -= 0.01; updateTr
 document.getElementById('aim-center').onclick = () => { aimAngle = 0; updateTrajectory(); }
 document.getElementById('aim-right').onclick = () => { aimAngle += 0.01; updateTrajectory(); }
 
-// Distance Presets
+// Distance Presets (v15)
 document.getElementById('dist-near').onclick = () => { 
     cueBall.position.z = objBall.position.z + 5; 
     updateTrajectory(); 
 }
 document.getElementById('dist-med').onclick = () => { 
-    cueBall.position.z = objBall.position.z + 10; 
+    cueBall.position.z = objBall.position.z + 12.5; 
     updateTrajectory(); 
 }
 document.getElementById('dist-far').onclick = () => { 
-    cueBall.position.z = objBall.position.z + 15; 
+    cueBall.position.z = objBall.position.z + 24; 
     updateTrajectory(); 
 }
 
@@ -573,8 +573,8 @@ document.getElementById('reset-button').onclick = () => {
     isStriking = false;
     shotProgress = 0;
     
-    cueBall.position.set(0, 0, tableLength/4);
-    objBall.position.set(0, 0, -tableLength/4);
+    cueBall.position.set(0, 0, 12.0); // Reset to Far (v15)
+    objBall.position.set(0, 0, -12.0);
     cueBallObj.mesh.quaternion.set(0,0,0,1);
     objBallObj.mesh.quaternion.set(0,0,0,1);
     
