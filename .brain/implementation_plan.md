@@ -87,8 +87,28 @@ To bring the simulation to life, we will animate the balls along the pre-calcula
 - **Shooting State**: Balls are moving. Disable aim/spin adjustments.
 - **Finished State**: Balls have stopped. Show final positions. `RESET` clears the state.
 
+## Procedural Animation & VFX (High Fidelity)
+To elevate the visual realism while maintaining mobile performance:
+
+### 1. Procedural Cue Stick
+- **Geometry**: A custom tapered cylinder (3D Cue Stick) aligned with the aim direction.
+- **Drawback**: Mapped 1:1 to the Power Slider.
+- **Strike**: Triggered on "SHOOT". Uses an **Ease-In** curve to accelerate into the cue ball.
+- **Termination**: Stops exactly at the ball's surface.
+
+### 2. True-Roll Ball Rotation
+- **Physics Link**: $v = r\omega$ logic.
+- **Math**: Use `THREE.Quaternion`. For each frame, calculate a rotation axis perpendicular to the velocity and an angle based on distance traveled.
+- **Benefit**: Eliminates "sliding" look and prevents Gimbal Lock during complex spin shots.
+
+### 3. VFX Object Pooling
+- **Pattern**: `ParticlePool` class pre-allocates 50+ impact sprites/meshes.
+- **VFX Types**:
+  - **Chalk Dust**: Blue puff at the cue-tip impact point.
+  - **Pocket Drop**: Visual indicator when a ball is potted.
+- **Optimization**: Toggles visibility/transparency instead of creating/destroying objects.
+
 ## Verification Plan
-1. Click "SHOOT" and verify the cue ball hits the object ball as intended.
-2. Confirm the object ball follows the yellow line and the cue ball follows the red curve.
-3. Verify that English effects (Draw/Follow) are visible in the movement.
-4. Test that the "RESET" button correctly restores the table for the next shot.
+1. Observe the cue stick's smooth Ease-In motion during the strike.
+2. Verify balls rotate realistically relative to their speed and direction.
+3. Confirm no garbage collection spikes (lag) during repeated shots with VFX.

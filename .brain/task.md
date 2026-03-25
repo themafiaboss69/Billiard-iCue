@@ -41,11 +41,15 @@
   - [x] Implement Blob Shadows for balls (Sprite-based)
   - [x] Implement Matcap Reflections for balls (Fake specular)
   - [x] Implement Texture Batching (Atlas simulation)
-- [ ] Shot Animation
-  - [ ] Implement animation state machine (Aiming -> Shooting -> Finished)
-  - [ ] Animate Cue Ball along pre-collision path
-  - [ ] Trigger collision animation (Object Ball movement)
-  - [ ] Animate Cue Ball curve and Object Ball throw path
+- [x] Shot Animation
+  - [x] Implement animation state machine (Aiming -> Shooting -> Finished)
+  - [x] Animate Cue Ball along pre-collision path
+  - [x] Trigger collision animation (Object Ball movement)
+  - [x] Animate Cue Ball curve and Object Ball throw path
+- [ ] Procedural Animation & VFX (High Fidelity)
+  - [ ] Implement Procedural Cue Stick (Lerp/Easing)
+  - [ ] Implement True-Roll Ball Rotation (Quaternions, $v=r\omega$)
+  - [ ] Implement VFX Object Pool (Chalk Dust, Sparks)
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository

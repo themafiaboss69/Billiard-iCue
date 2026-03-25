@@ -131,6 +131,31 @@ const cueBall = cueBallObj.group;
 const objBallObj = createBall(0xffaa00, -tableLength/4);
 const objBall = objBallObj.group;
 
+// --- Procedural 3D Cue Stick ---
+const cueStickGeo = new THREE.CylinderGeometry(0.04, 0.08, 15, 12);
+cueStickGeo.translate(0, 7.5 + ballRadius + 0.1, 0); // Offset so tip is at origin
+const cueStickMat = new THREE.MeshBasicMaterial({ color: 0xc2a376 }); // Wood color
+const cueStick = new THREE.Mesh(cueStickGeo, cueStickMat);
+cueStick.rotation.x = Math.PI / 2;
+scene.add(cueStick);
+
+// --- VFX Object Pool (Chalk Dust) ---
+const vfxPool = [];
+const vfxSize = 20;
+for (let i = 0; i < vfxSize; i++) {
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 8), new THREE.MeshBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0 }));
+    scene.add(p);
+    vfxPool.push(p);
+}
+let vfxIdx = 0;
+
+function triggerVFX(pos) {
+    const p = vfxPool[vfxIdx];
+    p.position.copy(pos);
+    p.material.opacity = 0.8;
+    vfxIdx = (vfxIdx + 1) % vfxSize;
+}
+
 const ghostBall = new THREE.Mesh(
     new THREE.SphereGeometry(ballRadius, 32, 32),
     new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 })
@@ -224,9 +249,15 @@ let shotData = {
 
 // --- Math & Trajectory Calculation ---
 function updateTrajectory() {
-    if (isShooting) return; // Don't recalculate while animating
+    if (isShooting || isStriking) return; 
 
-    const aimDir = new THREE.Vector3(Math.sin(aimAngle), 0, -Math.cos(aimAngle)).normalize();
+    // Update Cue Stick Position
+    const pullback = (power / 100) * 2.0;
+    const stickDir = new THREE.Vector3(Math.sin(aimAngle), 0, -Math.cos(aimAngle));
+    cueStick.position.copy(cueBall.position).addScaledVector(stickDir, -pullback - 0.2);
+    cueStick.rotation.y = aimAngle;
+
+    const aimDir = stickDir.clone().normalize();
     const up = new THREE.Vector3(0, 1, 0);
     const powerFactor = power / 50.0;
     
@@ -486,45 +517,88 @@ document.getElementById('aim-right').onclick = () => { aimAngle -= 0.01; updateT
 
 document.getElementById('reset-button').onclick = () => {
     isShooting = false;
+    isStriking = false;
     shotProgress = 0;
     
     cueBall.position.set(0, 0, tableLength/4);
     objBall.position.set(0, 0, -tableLength/4);
+    cueBallObj.mesh.quaternion.set(0,0,0,1);
+    objBallObj.mesh.quaternion.set(0,0,0,1);
+    
     aimAngle = 0;
     english = { x: 0, y: 0 };
     document.getElementById('power-slider').value = 50;
     power = 50;
     
-    // Restore line visibility
+    // Restore visibility
     aimLineObj.visible = true;
     objLineObj.visible = true;
     cueLineObj.visible = true;
+    cueStick.visible = true;
     
     updateEnglishUI();
     updateTrajectory();
 };
 
+let isStriking = false;
+let strikeProgress = 0;
+
 document.getElementById('shoot-button').onclick = () => {
-    if (isShooting) return;
-    isShooting = true;
-    shotProgress = 0;
-    // Hide prediction lines during shot
-    aimLineObj.visible = false;
-    objLineObj.visible = false;
-    cueLineObj.visible = false;
-    ghostBall.visible = false;
+    if (isShooting || isStriking) return;
+    isStriking = true;
+    strikeProgress = 0;
 };
+
+function updateBallRotation(ballGroup, ballMesh, deltaPos) {
+    if (deltaPos.lengthSq() < 0.000001) return;
+    
+    // Axis = perpedicular to movement (XZ plane)
+    const axis = new THREE.Vector3(deltaPos.z, 0, -deltaPos.x).normalize();
+    const angle = deltaPos.length() / ballRadius;
+    
+    const q = new THREE.Quaternion().setFromAxisAngle(axis, angle);
+    ballMesh.quaternion.premultiply(q);
+}
 
 // --- Render Loop ---
 function animate() {
     requestAnimationFrame(animate);
     
+    // Update VFX Pool (fade out)
+    vfxPool.forEach(p => { if (p.material.opacity > 0) p.material.opacity -= 0.02; });
+
+    if (isStriking) {
+        strikeProgress += 0.08; // Strike speed
+        const easeIn = Math.pow(strikeProgress, 3); // Sharp Ease-In
+        const pullback = (power / 100) * 2.0;
+        const currentPull = pullback * (1 - easeIn);
+        
+        const stickDir = new THREE.Vector3(Math.sin(aimAngle), 0, -Math.cos(aimAngle));
+        cueStick.position.copy(cueBall.position).addScaledVector(stickDir, -currentPull - 0.2);
+        
+        if (strikeProgress >= 1) {
+            isStriking = false;
+            isShooting = true;
+            shotProgress = 0;
+            triggerVFX(cueBall.position.clone().addScaledVector(stickDir, -ballRadius));
+            // Hide prediction lines during shot
+            aimLineObj.visible = false;
+            objLineObj.visible = false;
+            cueLineObj.visible = false;
+            ghostBall.visible = false;
+            cueStick.visible = false;
+        }
+    }
+
     if (isShooting) {
-        shotProgress += 1.0; // Fixed timestep for animation
+        shotProgress += 1.0; 
         const cuePreLen = shotData.cuePrePoints.length;
         const cuePostLen = shotData.cuePostPoints.length;
         const objLen = shotData.objPoints.length;
         
+        const oldCuePos = cueBall.position.clone();
+        const oldObjPos = objBall.position.clone();
+
         // Phase 1: Cue Ball Pre-collision
         if (shotProgress < cuePreLen) {
             const p = shotData.cuePrePoints[Math.floor(shotProgress)];
@@ -532,30 +606,29 @@ function animate() {
         } else {
             // Phase 2: Post-collision
             const postIdx = Math.floor(shotProgress - cuePreLen);
-            
-            // Move Cue Ball
             if (postIdx < cuePostLen) {
                 const p = shotData.cuePostPoints[postIdx];
                 cueBall.position.set(p.x, 0, p.z);
             }
-            
-            // Move Object Ball
             if (postIdx < objLen) {
                 const p = shotData.objPoints[postIdx];
                 objBall.position.set(p.x, 0, p.z);
             }
             
-            // End animation
             if (postIdx >= cuePostLen && postIdx >= objLen) {
                 isShooting = false;
-                // Keep balls at final position and show prediction lines from new positions
                 aimLineObj.visible = true;
                 objLineObj.visible = true;
                 cueLineObj.visible = true;
                 ghostBall.visible = true;
+                cueStick.visible = true;
                 updateTrajectory();
             }
         }
+        
+        // True-Roll Rotation updates
+        updateBallRotation(cueBall, cueBallObj.mesh, cueBall.position.clone().sub(oldCuePos));
+        updateBallRotation(objBall, objBallObj.mesh, objBall.position.clone().sub(oldObjPos));
     }
 
     const width = window.innerWidth;
