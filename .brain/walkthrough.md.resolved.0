@@ -1,0 +1,25 @@
+# Billiard Cue Ball Guide - Walkthrough
+
+## What was built
+I've implemented the V1 Billiard physics guide using Vanilla JavaScript and **Three.js**. Because `npm` was unavailable in the current terminal state, I bypassed the Vite setup and built it purely using HTML/JS/CSS with Three.js imported via CDNs. This makes the app incredibly portable and easy to run anywhere.
+
+### Features
+1. **Dual-Screen Layout**: 
+   - The top half of the screen displays the 3D first-person view behind the cue ball.
+   - The bottom half displays a top-down, 2D-style orthographic view.
+2. **Aim Controls**: You can drag anywhere on the screen to rotate your aim angle. There are also fine-tune `Left` and `Right` buttons at the bottom.
+3. **English (Spin) Controls**: The bottom-left features a mini cue ball mapping. Drag the red dot to apply spin (Top/Follow, Bottom/Draw, Left/Right). Fine-tune buttons (arrows and center) are included for precise adjustments.
+4. **Power System**: A vertical slider on the right to adjust shot power (1-100).
+5. **Physics & Prediction Lines**:
+   - **White Line**: The line from the cue ball to the predicted "Ghost Ball" impact location.
+   - **Yellow Line**: The object ball's trajectory, which correctly follows the straight collision normal.
+   - **Red Line**: The post-impact tangent line for the cue ball. When you apply Top English (Follow), this red line curves gracefully forward. When you apply Bottom English (Draw), it curves backward, demonstrating the post-collision trajectory changes.
+
+## How to Verify
+A local development server is currently running.
+
+1. Open a browser and navigate to `http://localhost:8080`
+2. **Important**: Since this layout was designed for mobile (phone app), it is highly recommended to use your browser's **Developer Tools -> Device Emulation** (e.g., iPhone 14 Pro Max) and reload the page to see the proper UI layout.
+3. **Test Aiming**: Click/Touch and drag horizontally across the screen to aim at the yellow object ball. Verify the ghost ball appears when aiming hits the yellow ball.
+4. **Test English**: Drag the red dot in the bottom-left circle to apply top spin (upwards) or bottom spin (downwards). Observe how the red post-collision line bends based on your spin selection!
+5. **Fine-Tuning**: Use the on-screen buttons to incrementally rotate your aim angle or spin values.

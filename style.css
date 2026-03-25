@@ -1,0 +1,244 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body, html {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #111;
+    color: white;
+}
+
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none; /* Let touches pass through to canvas by default */
+}
+
+/* Enable pointer events only for interactive UI elements */
+#ui-overlay > * {
+    pointer-events: auto;
+}
+
+/* --- Power Slider --- */
+#power-container {
+    position: absolute;
+    right: 10px;
+    bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    transform: scale(0.9);
+    transform-origin: bottom right;
+}
+
+#power-slider {
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 20px;
+    height: 150px;
+    margin-top: 10px;
+}
+
+/* --- English Control --- */
+#english-container {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(0.85);
+    transform-origin: bottom left;
+}
+
+.control-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    color: #ccc;
+}
+
+#english-ball {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, #fff, #bbb);
+    position: relative;
+    border: 2px solid #555;
+    box-shadow: inset -5px -5px 10px rgba(0,0,0,0.5);
+    touch-action: none;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+#english-crosshair {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+#english-crosshair::before, #english-crosshair::after {
+    content: '';
+    position: absolute;
+    background: rgba(0,0,0,0.3);
+}
+
+#english-crosshair::before {
+    top: 50%; left: 0; right: 0; height: 2px; transform: translateY(-1px);
+}
+
+#english-crosshair::after {
+    left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-1px);
+}
+
+#english-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #ff3333;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    margin-top: -6px;
+    margin-left: -6px;
+    /* JS sets top/left as % */
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(255,0,0,0.8);
+    pointer-events: none;
+}
+
+/* --- Fine Tune Controls --- */
+.fine-tune-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.fine-tune-controls > div {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-tune {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.btn-tune:active {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* --- Aim Container --- */
+#aim-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 12px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 50;
+}
+
+.aim-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.aim-buttons .btn-tune {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 10px;
+}
+
+/* --- Action Buttons --- */
+#shoot-button, #reset-button {
+    position: absolute;
+    padding: 15px 25px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: transform 0.1s, opacity 0.2s;
+    z-index: 50;
+}
+
+#shoot-button {
+    bottom: 20px;
+    right: 10px;
+    background: linear-gradient(135deg, #00ff88, #00cc66);
+    color: #003311;
+}
+
+#reset-button {
+    top: 20px;
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: white;
+}
+
+#shoot-button:active, #reset-button:active {
+    transform: scale(0.95);
+}
+
+/* Layout for split screen borders visually */
+#canvas-container::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+}

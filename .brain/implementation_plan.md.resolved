@@ -1,0 +1,65 @@
+# Billiard Cue Ball Guide Implementation Plan
+
+## Goal Description
+Build a web-based mobile-friendly application that serves as a Billiard cue ball guide. The app will feature dual-screen viewing (top-down 2D-style view and 3D third-person view), touch controls to aim the shot, a power slider (1-100), and an English (spin) adjuster. It will calculate and display simple predictive geometry lines for both the cue ball and the target ball, demonstrating how English changes the trajectory (e.g., top spin/follow, bottom spin/draw).
+
+## Proposed Tech Stack
+- **Framework**: Vite + Vanilla JS + HTML structure
+- **3D Graphics**: **Three.js**. This is highly recommended because it easily allows us to render the exact same 3D scene from two different cameras (a top-down OrthographicCamera for the 2D view, and a PerspectiveCamera behind the cue ball for the 3D third-person view) in a split-screen layout.
+- **Styling**: Vanilla CSS for simple, responsive UI overlays.
+
+## User Review Required
+> [!IMPORTANT]
+> Please review the approach to physics and graphics:
+> 1. Is Three.js split-screen acceptable? (Top half: 3D third-person view, Bottom half: Top-down view).
+> 2. For the initial setup ("simple graphics, see how it goes"), we will use simple spheres for balls, a green plane for the table, and basic lines for trajectories.
+> 3. Physics calculation: We will implement a custom math solution for the trajectory prediction lines (Object ball goes along the line-of-centers; Cue ball travels the 90-degree tangent line, which curves based on top/bottom english). Does this sound good for V1?
+
+## Proposed Changes
+
+### Setup and Configuration
+- Initialize Vite project.
+- Install `three` via npm.
+- Set up responsive mobile viewport meta tags.
+
+### UI and Layout
+#### [MODIFY] index.html
+- Split-screen layout (Two containers or one full-screen canvas with Three.js scissor testing).
+- Overlay controls:
+  - Power slider (1-100 input range).
+  - English control (a circular div with a draggable dot to select tip strike location: top, bottom, left, right).
+  - Fine-tune buttons (+/- or arrows) located near the aim and English controls to allow precise micro-adjustments.
+  - Aim controls (touch dragging on the 3D view rotates the cue ball's aim angle).
+  - A "Shoot" button to execute the shot based on current parameters.
+
+#### [NEW] src/style.css
+- Mobile-first, absolute positioning for UI controls to float over the canvas.
+
+### Logic and Physics
+#### [NEW] src/main.js
+- **Three.js Initialization**: Scene, Lighting, Floor (table color), and two Spheres (Cue Ball, Object Ball).
+- **Dual Camera Setup**: 
+  - `camera3D`: Placed behind the cue ball, looking along the aim line.
+  - `cameraTop`: Orthographic camera looking straight down at the table.
+- **Physics Engine (V1)**:
+  - Calculate aiming vector.
+  - Perform ray/sphere intersection to find the "Ghost Ball" position (where the cue ball will be at the exact moment of impact).
+  - **Aim Line**: Draw a line from the Cue Ball to the Ghost Ball.
+  - **Object Ball Path**: Draw a straight line from the Object Ball along the collision normal (line of centers from Ghost Ball to Object Ball).
+  - **Cue Ball Post-Collision Path**: Calculate the tangent line (90 degrees from the collision normal). Modify this path based on the English parameters:
+    - Top English (Follow): Curve the trajectory forward.
+    - Bottom English (Draw): Curve the trajectory backward.
+    - Render this path as a curved/segmented line in Three.js.
+- **Animation Loop**: When "Shoot" is pressed, optionally animate the balls moving along these predicted paths to verify the math visually.
+
+## Verification Plan
+
+### Automated Tests
+- Since this is highly visual and experimental, we will spin up the Vite dev server (`npm run dev`) and utilize the `read_browser_page` tool to verify the canvas mounts and there are no JS console errors.
+
+### Manual Verification
+1. Open the dev server URL in a browser with mobile emulation.
+2. Verify split-screen rendering (Top-down and 3D).
+3. Drag to aim: Verify the white aim line and ghost ball position update correctly as it sweeps past the object ball.
+4. Adjust English (e.g. max bottom spin): Verify the post-collision cue ball trajectory line bends backward.
+5. Hit "Shoot" to observe the balls follow the predicted lines.

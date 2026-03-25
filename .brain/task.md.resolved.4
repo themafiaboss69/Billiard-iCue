@@ -1,0 +1,26 @@
+# Billiard Cue Ball Guide Task List
+
+- [x] Planning and Research
+  - [x] Research billiard physics involving English (spin) and trajectory prediction
+  - [x] Create implementation plan and recommend approach to the user
+  - [x] Get user approval on the plan
+- [x] Project Setup
+  - [x] Initialize Vite + Vanilla JS project (or similar simple setup)
+  - [x] Install dependencies (Three.js for 3D view, or just use 2D canvas for both if simpler)
+- [x] UI Architecture
+  - [x] Implement dual-screen layout (Top View and Third-Person View)
+  - [x] Implement power meter (1 to 100 drag)
+  - [x] Implement English adjustment UI (a circle representing the cue ball where the user can tap/drag to set spin)
+  - [x] Implement touch/drag controls to aim the shot
+  - [x] Implement fine-tune controls for aim (left/right buttons) and English (up/down/left/right buttons)
+- [x] Physics & Trajectory Engine
+  - [x] Basic raycasting/geometry for cue ball to target ball impact (ghost ball)
+  - [x] Calculate target ball trajectory (always along the normal of the collision)
+  - [x] Calculate cue ball tangent line (deflection immediately after hit)
+  - [x] Apply English (spin) physics to modify cue ball post-collision trajectory (draw, follow)
+- [x] Graphics & Rendering
+  - [x] Render the trajectory lines (aim line, cue ball path, object ball path)
+  - [x] Basic 3D/2D rendering of the table and balls
+- [x] Verification
+  - [x] Test the interface on mobile dimensions
+  - [x] Verify physics logic

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Billiard iCue Guide</title>
+    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#111111">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><circle cx='96' cy='96' r='88' fill='%23ffffff' stroke='%23000' stroke-width='8'/><circle cx='120' cy='60' r='10' fill='%23ff0000'/></svg>">
+    
+    <!-- Use Import Maps for Three.js -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Container for WebGL Canvases (Top and 3D views) -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay container -->
+    <div id="ui-overlay">
+        <!-- Power Meter -->
+        <div id="power-container">
+            <label for="power-slider">Power</label>
+            <input type="range" id="power-slider" min="1" max="100" value="50" orient="vertical">
+        </div>
+
+        <!-- English (Spin) Control -->
+        <div id="english-container">
+            <div class="control-label">English (Spin)</div>
+            <div id="english-ball">
+                <svg id="english-crosshair" width="100%" height="100%" style="position:absolute; top:0; left:0; pointer-events:none;">
+                    <line x1="50%" y1="0%" x2="50%" y2="100%" stroke="rgba(0,0,0,0.5)" stroke-width="2"/>
+                    <line x1="0%" y1="50%" x2="100%" y2="50%" stroke="rgba(0,0,0,0.5)" stroke-width="2"/>
+                    <circle cx="50%" cy="50%" r="3" fill="rgba(0,0,0,0.8)"/>
+                </svg>
+                <div id="english-dot"></div>
+            </div>
+            <div class="fine-tune-controls">
+                <button id="english-up" class="btn-tune">▲</button>
+                <div>
+                    <button id="english-left" class="btn-tune">◀</button>
+                    <button id="english-center" class="btn-tune">●</button>
+                    <button id="english-right" class="btn-tune">▶</button>
+                </div>
+                <button id="english-down" class="btn-tune">▼</button>
+            </div>
+        </div>
+        
+        <!-- Aim Fine Tune -->
+        <div id="aim-container">
+            <div class="control-label">Fine Tune Aim</div>
+            <div class="aim-buttons">
+                <button id="aim-left" class="btn-tune">◀</button>
+                <button id="aim-center" class="btn-tune">●</button>
+                <button id="aim-right" class="btn-tune">▶</button>
+            </div>
+        </div>
+
+        <!-- Shoot Button -->
+        <button id="shoot-button">SHOOT</button>
+        
+        <!-- Reset Button -->
+        <button id="reset-button">RESET</button>
+    </div>
+
+    <script type="module" src="main.js?v=3"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(() => console.log("Service Worker Registered"));
+        }
+    </script>
+</body>
+</html>
