@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Billiard iCue Guide</title>
-    <link rel="stylesheet" href="style.css?v=12">
+    <link rel="stylesheet" href="style.css?v=13">
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -59,15 +59,22 @@
         <div id="aim-container">
             <div class="control-label">AIM</div>
             <div class="fine-tune-controls">
-            <button id="aim-left">←</button>
-            <button id="aim-center">●</button>
-            <button id="aim-right">→</button>
+                <button id="aim-left">←</button>
+                <button id="aim-center">●</button>
+                <button id="aim-right">→</button>
+            </div>
+            
+            <div class="dist-controls" style="margin-top: 10px; display: flex; gap: 5px;">
+                <button id="dist-near" class="btn-tune small">NEAR</button>
+                <button id="dist-med" class="btn-tune small">MED</button>
+                <button id="dist-far" class="btn-tune small">FAR</button>
+            </div>
+
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; color: #aaa; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">
+                <input type="checkbox" id="show-throw-vectors" style="width: 18px; height: 18px;">
+                <label for="show-throw-vectors">Show Throw Vectors</label>
+            </div>
         </div>
-        <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; color: #aaa; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">
-            <input type="checkbox" id="show-throw-vectors" style="width: 18px; height: 18px;">
-            <label for="show-throw-vectors">Show Throw Vectors</label>
-        </div>
-    </div>
 
         <!-- Shoot Button -->
         <button id="shoot-button">SHOOT</button>
@@ -76,7 +83,7 @@
         <button id="reset-button">RESET</button>
     </div>
 
-    <script type="module" src="main.js?v=11"></script>
+    <script type="module" src="main.js?v=13"></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').then(() => console.log("Service Worker Registered"));

@@ -8,10 +8,10 @@ I've implemented the V1 Billiard physics guide using Vanilla JavaScript and **Th
    - The table now features a proper **2:1 aspect ratio** (standard for pool).
    - Added **3D Wood Rails** (cushions) that create a physical boundary for the scene.
    - Includes **Pockets** and the **Head Spot** marking for authentic alignment.
-2. **Optimized UI Layout (v12)**:
-   - **Aim Controls Fixed**: Swapped the "Left/Right" buttons to match natural user intuition. Pressing Right now rotates the aim clockwise (to the right).
-   - **Human Strength Scaling**: The power system is recalibrated for realism (100% = previous 50%).
-   - **Cache Fix**: Bumped the version to `v=12` to force-load the new control logic.
+2. **Optimized UI Layout (v13)**:
+   - **Distance Presets**: New **NEAR**, **MED**, and **FAR** buttons in the AIM menu allow for instant cue ball positioning.
+   - **Stacking Fix**: The AIM menu is now vertically stacked for better readability, with the **Show Throw Vectors** toggle clearly separated at the bottom.
+   - **Cache Fix**: Bumped the version to `v=13` to force-load the new presets and layout logic.
    - **Action Buttons**: `RESET` (top-left) and `SHOOT` (bottom-right) are ergonomically placed.
 ### Mobile GPU Optimization (v5)
 3. **High-Fidelity Rendering (Light-Free)**:

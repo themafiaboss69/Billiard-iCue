@@ -167,13 +167,13 @@ body, html {
     left: 10px;
     bottom: 15px;
     background: rgba(0, 0, 0, 0.6);
-    padding: 10px 15px;
+    padding: 15px 15px;
     border-radius: 20px;
     backdrop-filter: blur(8px);
     display: flex;
-    flex-direction: row; /* Labels and buttons horizontal */
-    align-items: center;
-    gap: 15px;
+    flex-direction: column; /* Stacked layout (Label -> Aim -> Dist -> Toggle) */
+    align-items: flex-start;
+    gap: 12px;
     z-index: 110;
     border: 1px solid rgba(255,255,255,0.1);
     transform: scale(0.8);
@@ -214,6 +214,20 @@ body, html {
     height: 40px;
     font-size: 18px;
     border-radius: 10px;
+}
+
+.btn-tune.small {
+    padding: 0 10px;
+    font-size: 10px;
+    width: auto;
+    height: 28px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.btn-tune.small:active {
+    background: rgba(255,255,255,0.2);
 }
 
 /* --- Action Buttons --- */

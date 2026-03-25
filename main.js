@@ -539,6 +539,20 @@ document.getElementById('aim-left').onclick = () => { aimAngle -= 0.01; updateTr
 document.getElementById('aim-center').onclick = () => { aimAngle = 0; updateTrajectory(); }
 document.getElementById('aim-right').onclick = () => { aimAngle += 0.01; updateTrajectory(); }
 
+// Distance Presets
+document.getElementById('dist-near').onclick = () => { 
+    cueBall.position.z = objBall.position.z + 5; 
+    updateTrajectory(); 
+}
+document.getElementById('dist-med').onclick = () => { 
+    cueBall.position.z = objBall.position.z + 10; 
+    updateTrajectory(); 
+}
+document.getElementById('dist-far').onclick = () => { 
+    cueBall.position.z = objBall.position.z + 15; 
+    updateTrajectory(); 
+}
+
 document.getElementById('reset-button').onclick = () => {
     isShooting = false;
     isStriking = false;

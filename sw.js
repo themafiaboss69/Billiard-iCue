@@ -1,9 +1,9 @@
-const CACHE_NAME = 'icue-guide-v12';
+const CACHE_NAME = 'icue-guide-v13';
 const urlsToCache = [
   './',
   './index.html',
-  './style.css?v=12',
-  './main.js?v=12',
+  './style.css?v=13',
+  './main.js?v=13',
   './manifest.json'
 ];
 
