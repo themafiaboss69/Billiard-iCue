@@ -264,13 +264,14 @@ function updateTrajectory() {
         if (currentPreVelocity.lengthSq() < 0.001) break;
     }
     
-    aimLineObj.geometry.setFromPoints(aimLinePoints);
+    aimLineObj.geometry.setFromPoints(aimLinePoints.map(p => new THREE.Vector3(p.x, ballRadius, p.z)));
     
     let objPathEnd = new THREE.Vector3();
     let cuePathPoints = [];
     
     if (hit) {
         ghostBall.position.copy(ghostPos);
+        ghostBall.position.y = ballRadius;
         ghostBall.visible = true;
         
         // --- Object Ball Physics (SIT, CIT, CIT-Deviation) ---
@@ -299,13 +300,19 @@ function updateTrajectory() {
         const vObjPost = vCuePre * cosTheta;
         
         objPathEnd.copy(objBall.position).addScaledVector(objDir, 10 * (vObjPost / 2.0));
-        objLineObj.geometry.setFromPoints([objBall.position, objPathEnd]);
+        objLineObj.geometry.setFromPoints([
+            new THREE.Vector3(objBall.position.x, ballRadius, objBall.position.z),
+            new THREE.Vector3(objPathEnd.x, ballRadius, objPathEnd.z)
+        ]);
         
         // Debug Vectors
         if (showThrowVectors) {
             // Natural path (Line of Centers)
             const naturalPathEnd = objBall.position.clone().addScaledVector(collisionNormal, 10 * (vObjPost / 2.0));
-            naturalLineObj.geometry.setFromPoints([objBall.position, naturalPathEnd]);
+            naturalLineObj.geometry.setFromPoints([
+                new THREE.Vector3(objBall.position.x, ballRadius, objBall.position.z),
+                new THREE.Vector3(naturalPathEnd.x, ballRadius, naturalPathEnd.z)
+            ]);
             naturalLineObj.visible = true;
         } else {
             naturalLineObj.visible = false;
@@ -340,7 +347,7 @@ function updateTrajectory() {
             cuePathPoints.push(currentPos.clone());
         }
         if (cuePathPoints.length === 1) cuePathPoints.push(ghostPos.clone().add(new THREE.Vector3(0,0.01,0)));
-        cueLineObj.geometry.setFromPoints(cuePathPoints);
+        cueLineObj.geometry.setFromPoints(cuePathPoints.map(p => new THREE.Vector3(p.x, ballRadius, p.z)));
     } else {
         objLineObj.geometry.setFromPoints([]);
         cueLineObj.geometry.setFromPoints([]);
