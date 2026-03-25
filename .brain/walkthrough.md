@@ -8,10 +8,11 @@ I've implemented the V1 Billiard physics guide using Vanilla JavaScript and **Th
    - The table now features a proper **2:1 aspect ratio** (standard for pool).
    - Added **3D Wood Rails** (cushions) that create a physical boundary for the scene.
    - Includes **Pockets** and the **Head Spot** marking for authentic alignment.
-2. **Optimized UI Layout (v9)**:
-   - **AIM Menu Restored**: Fixed a positioning glitch that moved the Aim menu; it is now correctly back in the **bottom-left** corner.
-   - **SPIN D-Pad Fixed**: Re-implemented the "Cross" layout for the spin buttons. The middle row (Left/Center/Right) is now correctly horizontal while the overall menu remains vertical.
-   - **Cache Fix**: Bumped the version to `v=9` to force-load these layout restorations across all mobile devices.
+2. **Optimized UI Layout (v10)**:
+   - **Physics Debug Toggle**: Added a "**Show Throw Vectors**" checkbox in the AIM menu. 
+     - **When Checked**: A dashed/dimmed line appears showing the "Natural Path" (the theoretical 90-degree path without physics).
+     - **Benefit**: You can now see *exactly* how vacuum-sealed geometry differs from real-world physics (SIT/CIT).
+   - **Cache Fix**: Bumped the version to `v=10` to ensure the new toggle and its corresponding logic are force-loaded.
    - **Action Buttons**: `RESET` (top-left) and `SHOOT` (bottom-right) are ergonomically placed.
 ### Mobile GPU Optimization (v5)
 3. **High-Fidelity Rendering (Light-Free)**:

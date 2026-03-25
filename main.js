@@ -469,6 +469,11 @@ document.getElementById('power-slider').addEventListener('input', (e) => {
     updateTrajectory();
 });
 
+document.getElementById('show-throw-vectors').addEventListener('change', (e) => {
+    showThrowVectors = e.target.checked;
+    updateTrajectory();
+});
+
 // English (Spin) System
 const eBall = document.getElementById('english-ball');
 const eDot = document.getElementById('english-dot');

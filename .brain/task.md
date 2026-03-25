@@ -50,9 +50,9 @@
   - [x] Implement Procedural Cue Stick (Lerp/Easing)
   - [x] Implement True-Roll Ball Rotation (Quaternions, $v=r\omega$)
   - [x] Implement VFX Object Pool (Chalk Dust, Sparks)
-- [x] UI & Cue Stick Detailing (v8)
-  - [x] Restore SPIN D-Pad layout (Cross)
-  - [x] Unify 3D Cue Stick width at contact point
+- [x] UI Restoration (v9)
+  - [x] Restore Aim menu to bottom-left
+  - [x] Restore English D-Pad cross layout
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository
