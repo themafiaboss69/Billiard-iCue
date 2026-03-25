@@ -1,0 +1,8 @@
+# Task: Troubleshoot blank page at http://localhost:8080
+
+## Plan
+- [ ] Open http://localhost:8080
+- [ ] Capture screenshot of the page
+- [ ] Capture console logs
+- [ ] Identify and report any errors (message and line number)
+- [ ] Take screenshot of the console (if possible via UI or just reporting logs)
