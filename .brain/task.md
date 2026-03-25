@@ -50,9 +50,9 @@
   - [x] Implement Procedural Cue Stick (Lerp/Easing)
   - [x] Implement True-Roll Ball Rotation (Quaternions, $v=r\omega$)
   - [x] Implement VFX Object Pool (Chalk Dust, Sparks)
-- [ ] UI & Cue Stick Detailing
-  - [ ] Simplify UI Labels (SPIN / AIM)
-  - [ ] Add Ferrule and Tip to 3D Cue Stick model
+- [x] UI & Cue Stick Detailing
+  - [x] Simplify UI Labels (SPIN / AIM)
+  - [x] Add Ferrule and Tip to 3D Cue Stick model
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository
