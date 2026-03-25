@@ -435,9 +435,24 @@ function updateCameras() {
     camera3D.position.copy(cueBall.position).add(cameraOffset);
     camera3D.lookAt(cueBall.position.clone().addScaledVector(aimDir, 2));
 
-    // Top Camera centered statically or dynamically follow balls
-    cameraTop.position.x = (cueBall.position.x + objBall.position.x) / 2;
-    cameraTop.position.z = (cueBall.position.z + objBall.position.z) / 2;
+    // Dynamic Top-View Zoom
+    const dist = Math.abs(cueBall.position.z - objBall.position.z);
+    const centerZ = (cueBall.position.z + objBall.position.z) / 2;
+    const centerX = (cueBall.position.x + objBall.position.x) / 2;
+    
+    const verticalNeeded = Math.max(12, dist + 6); 
+    const halfV = verticalNeeded / 2;
+    const aspect = window.innerWidth / (window.innerHeight / 2);
+    const halfH = Math.max(6, halfV * aspect);
+    
+    cameraTop.left = -halfH;
+    cameraTop.right = halfH;
+    cameraTop.top = halfV;
+    cameraTop.bottom = -halfV;
+    
+    cameraTop.position.set(centerX, 10, centerZ);
+    cameraTop.updateProjectionMatrix();
+    cameraTop.lookAt(centerX, 0, centerZ);
 }
 
 // --- Input Handling ---

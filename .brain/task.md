@@ -50,13 +50,15 @@
   - [x] Implement Procedural Cue Stick (Lerp/Easing)
   - [x] Implement True-Roll Ball Rotation (Quaternions, $v=r\omega$)
   - [x] Implement VFX Object Pool (Chalk Dust, Sparks)
-- [x] UI Restoration & Power Scaling (v11)
-  - [x] Restore Aim menu to bottom-left
-  - [x] Restore English D-Pad cross layout
-  - [x] Recalibrate power factor for human strength (/100.0)
+- [x] UI & Physics Refinement (v13)
+  - [x] Add Distance Presets (NEAR, MED, FAR)
+  - [x] Stack Aim menu vertically for clarity
+  - [x] Move Throw Vector toggle below buttons
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository
+  - [x] Enable GitHub Sync & Push
+  - [x] Add PWA Installation Guide to Walkthroughepository
   - [x] Create private GitHub repository "Billiard-iCue"
   - [x] Include artifacts in the repository (`.brain/` folder)
   - [x] Push initial commit to GitHub
