@@ -3,11 +3,17 @@
 ## What was built
 I've implemented the V1 Billiard physics guide using Vanilla JavaScript and **Three.js**. Because `npm` was unavailable in the current terminal state, I bypassed the Vite setup and built it purely using HTML/JS/CSS with Three.js imported via CDNs. This makes the app incredibly portable and easy to run anywhere.
 
-### Features
-0. **GitHub Repository**: The code and artifacts are synced to a private repository: [Billiard-iCue](https://github.com/themafiaboss69/Billiard-iCue.git)
-1. **Dual-Screen Layout**: 
-   - The top half of the screen displays the 3D first-person view behind the cue ball.
-   - The bottom half displays a top-down, 2D-style orthographic view.
+### Visuals & UI
+1. **Realistic Table Design**: 
+   - The table now features a proper **2:1 aspect ratio** (standard for pool).
+   - Added **3D Wood Rails** (cushions) that create a physical boundary for the scene.
+   - Includes **Pockets** and the **Head Spot** marking for authentic alignment.
+2. **Optimized UI Layout**:
+   - **English (Spin)**: Moved to the **bottom-center** position. Being the most used control, it now sits right under the tactical view.
+   - **Fine Tune Aim**: Moved to the **bottom-left** corner and reduced in size (`0.75x`) to prevent it from blocking the view.
+   - **Action Buttons**: `RESET` (top-left) and `SHOOT` (bottom-right) are placed at the corners for ergonomic reach on mobile devices.
+3. **Dual-Screen Layout**: 
+   - The top half displays the 3D view; the bottom half displays the top-down tactical view.
 2. **Aim Controls**: You can drag anywhere on the screen to rotate your aim angle. There are also fine-tune `Left` and `Right` buttons at the bottom.
 3. **English (Spin) Controls**: The bottom-left features a mini cue ball mapping. Drag the red dot to apply spin (Top/Follow, Bottom/Draw, Left/Right). Fine-tune buttons (arrows and center) are included for precise adjustments.
 4. **Power System**: A vertical slider on the right to adjust shot power (1-100).
