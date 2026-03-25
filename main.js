@@ -136,21 +136,21 @@ const cueStick = new THREE.Group();
 
 // 1. Shaft (Tapered wood)
 const shaftGeo = new THREE.CylinderGeometry(0.04, 0.08, 14.5, 12);
-shaftGeo.translate(0, 8.0, 0); // Corrected offset for seamless connection
+shaftGeo.translate(0, 8.0, 0); 
 const shaftMat = new THREE.MeshBasicMaterial({ color: 0xc2a376 });
 const shaft = new THREE.Mesh(shaftGeo, shaftMat);
 cueStick.add(shaft);
 
-// 2. Ferrule (White)
+// 2. Ferrule (White) - Unified width 0.04
 const ferruleGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.2, 12);
-ferruleGeo.translate(0, 0.65, 0); // [0.55, 0.75]
+ferruleGeo.translate(0, 0.65, 0); 
 const ferruleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
 const ferrule = new THREE.Mesh(ferruleGeo, ferruleMat);
 cueStick.add(ferrule);
 
-// 3. Tip (Blue/Leather)
-const tipGeo = new THREE.CylinderGeometry(0.038, 0.04, 0.1, 12);
-tipGeo.translate(0, 0.55, 0); // [0.5, 0.6] - slightly thicker tip
+// 3. Tip (Blue) - Unified width 0.04
+const tipGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.1, 12);
+tipGeo.translate(0, 0.55, 0); 
 const tipMat = new THREE.MeshBasicMaterial({ color: 0x335588 });
 const tip = new THREE.Mesh(tipGeo, tipMat);
 cueStick.add(tip);
