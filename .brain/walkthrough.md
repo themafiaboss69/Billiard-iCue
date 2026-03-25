@@ -40,11 +40,31 @@ I've implemented the V1 Billiard physics guide using Vanilla JavaScript and **Th
    - **Throw Vectors**: Enable the "Show Throw Vectors" toggle to see the difference between the "Natural Path" (line of centers) and the "Actual Path" (including throw).
 6. **Speed Transfer**: The lines now dynamically scale their length based on the cut angle—thin cuts result in much slower object ball speeds, exactly matching the $\cos(\theta)$ energy transfer rule.
 
-## How to Verify
-A local development server is currently running.
+## Mobile Installation Guide
 
-1. Open a browser and navigate to `http://localhost:8080`
-2. **Important**: Since this layout was designed for mobile (phone app), it is highly recommended to use your browser's **Developer Tools -> Device Emulation** (e.g., iPhone 14 Pro Max) and reload the page to see the proper UI layout.
-3. **Test Aiming**: Click/Touch and drag horizontally across the screen to aim at the yellow object ball. Verify the ghost ball appears when aiming hits the yellow ball.
-4. **Test English**: Drag the red dot in the bottom-left circle to apply top spin (upwards) or bottom spin (downwards). Observe how the red post-collision line bends based on your spin selection!
-5. **Fine-Tuning**: Use the on-screen buttons to incrementally rotate your aim angle or spin values.
+### 1. Publishing to the Web (GitHub Pages)
+To host your app for free and make it installable:
+1. Go to your repository: `https://github.com/themafiaboss69/Billiard-iCue`
+2. Click **Settings** -> **Pages**.
+3. Under **Branch**, select `main` and `/ (root)`. Click **Save**.
+4. Your app will be live at: `https://themafiaboss69.github.io/Billiard-iCue/` (wait 1 minute).
+
+### 2. Installing on iOS (iPhone/iPad)
+1. Open the URL above in **Safari**.
+2. Tap the **Share** button (Square with Up arrow).
+3. Select **Add to Home Screen**.
+4. Launch "iCue" from your home screen for a full-screen app experience!
+
+### 3. Installing on Android
+1. Open the URL above in **Google Chrome**.
+2. Tap the **Three Dots** menu -> **Install App**.
+3. Open from your home screen/app drawer.
+
+---
+
+## Final Verification Checklist
+1. **Cue Stick**: Verify the seamless shaft, white ferrule, and blue tip.
+2. **Animation**: Click **SHOOT** to see the 60fps Ease-In strike and True-Roll physics.
+3. **English**: Confirm the **SPIN** D-Pad layout is a perfect cross.
+4. **Throw**: Check "Show Throw Vectors" to see the natural 90° path vs the physics-corrected trajectory.
+5. **Offline**: Once installed, the app works without internet thanks to the v11 Service Worker.
