@@ -1,9 +1,10 @@
-const CACHE_NAME = 'icue-guide-v1';
+const CACHE_NAME = 'icue-guide-v11';
 const urlsToCache = [
   './',
   './index.html',
-  './style.css?v=2',
-  './main.js?v=2'
+  './style.css?v=11',
+  './main.js?v=11',
+  './manifest.json'
 ];
 
 self.addEventListener('install', event => {
