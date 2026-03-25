@@ -185,20 +185,22 @@ body, html {
     left: 10px;
     bottom: 15px;
     background: rgba(0, 0, 0, 0.6);
-    padding: 8px 12px;
-    border-radius: 15px;
+    padding: 10px 15px;
+    border-radius: 20px;
     backdrop-filter: blur(8px);
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* Make labels and buttons horizontal */
     align-items: center;
+    gap: 15px;
     z-index: 110;
     border: 1px solid rgba(255,255,255,0.1);
-    transform: scale(0.85);
+    transform: scale(0.8);
     transform-origin: bottom left;
 }
 
 .fine-tune-controls {
     display: flex;
+    flex-direction: row; /* Horizontal buttons for Aim */
     align-items: center;
     gap: 10px;
 }

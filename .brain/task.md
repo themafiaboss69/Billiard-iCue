@@ -46,10 +46,13 @@
   - [x] Animate Cue Ball along pre-collision path
   - [x] Trigger collision animation (Object Ball movement)
   - [x] Animate Cue Ball curve and Object Ball throw path
-- [ ] Procedural Animation & VFX (High Fidelity)
-  - [ ] Implement Procedural Cue Stick (Lerp/Easing)
-  - [ ] Implement True-Roll Ball Rotation (Quaternions, $v=r\omega$)
-  - [ ] Implement VFX Object Pool (Chalk Dust, Sparks)
+- [x] Procedural Animation & VFX (High Fidelity)
+  - [x] Implement Procedural Cue Stick (Lerp/Easing)
+  - [x] Implement True-Roll Ball Rotation (Quaternions, $v=r\omega$)
+  - [x] Implement VFX Object Pool (Chalk Dust, Sparks)
+- [ ] UI & Cue Stick Detailing
+  - [ ] Simplify UI Labels (SPIN / AIM)
+  - [ ] Add Ferrule and Tip to 3D Cue Stick model
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository

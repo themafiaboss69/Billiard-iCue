@@ -108,7 +108,20 @@ To elevate the visual realism while maintaining mobile performance:
   - **Pocket Drop**: Visual indicator when a ball is potted.
 - **Optimization**: Toggles visibility/transparency instead of creating/destroying objects.
 
+## UI & Cue Stick Detailing
+To improve visual communication and realism:
+
+### 1. Minimalist UI Labels
+- **English**: Rename to "**SPIN**".
+- **Aim**: Rename to "**AIM**".
+- **Reasoning**: Shorter labels are cleaner on mobile and leave more room for the tactical view.
+
+### 2. Detailed Cue Stick Model
+- **Ferrule**: A white, high-durability plastic component added to the end of the shaft.
+- **Tip**: A dark blue/black leather tip added to the very end.
+- **Implementation**: The `cueStick` will be converted to a `THREE.Group` containing three distinct meshes with different materials to avoid complex texturing.
+
 ## Verification Plan
-1. Observe the cue stick's smooth Ease-In motion during the strike.
-2. Verify balls rotate realistically relative to their speed and direction.
-3. Confirm no garbage collection spikes (lag) during repeated shots with VFX.
+1. Confirm UI labels are updated to SPIN and AIM.
+2. Verify the 3D cue stick clearly shows the white ferrule and colored tip.
+3. Pulse the cache-buster to ensure the user's phone loads the new geometry.

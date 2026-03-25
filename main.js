@@ -131,11 +131,30 @@ const cueBall = cueBallObj.group;
 const objBallObj = createBall(0xffaa00, -tableLength/4);
 const objBall = objBallObj.group;
 
-// --- Procedural 3D Cue Stick ---
-const cueStickGeo = new THREE.CylinderGeometry(0.04, 0.08, 15, 12);
-cueStickGeo.translate(0, 7.5 + ballRadius + 0.1, 0); // Offset so tip is at origin
-const cueStickMat = new THREE.MeshBasicMaterial({ color: 0xc2a376 }); // Wood color
-const cueStick = new THREE.Mesh(cueStickGeo, cueStickMat);
+// --- Procedural 3D Cue Stick (Detailed) ---
+const cueStick = new THREE.Group();
+
+// 1. Shaft (Tapered wood)
+const shaftGeo = new THREE.CylinderGeometry(0.04, 0.08, 14.5, 12);
+shaftGeo.translate(0, 8.0, 0); // Corrected offset for seamless connection
+const shaftMat = new THREE.MeshBasicMaterial({ color: 0xc2a376 });
+const shaft = new THREE.Mesh(shaftGeo, shaftMat);
+cueStick.add(shaft);
+
+// 2. Ferrule (White)
+const ferruleGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.2, 12);
+ferruleGeo.translate(0, 0.65, 0); // [0.55, 0.75]
+const ferruleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+const ferrule = new THREE.Mesh(ferruleGeo, ferruleMat);
+cueStick.add(ferrule);
+
+// 3. Tip (Blue/Leather)
+const tipGeo = new THREE.CylinderGeometry(0.038, 0.04, 0.1, 12);
+tipGeo.translate(0, 0.55, 0); // [0.5, 0.6] - slightly thicker tip
+const tipMat = new THREE.MeshBasicMaterial({ color: 0x335588 });
+const tip = new THREE.Mesh(tipGeo, tipMat);
+cueStick.add(tip);
+
 cueStick.rotation.x = Math.PI / 2;
 scene.add(cueStick);
 
