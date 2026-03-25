@@ -21,15 +21,19 @@
 - [x] Graphics & Rendering
   - [x] Render the trajectory lines (aim line, cue ball path, object ball path)
   - [x] Basic 3D/2D rendering of the table and balls
-- [ ] Physics Refinements (Expert Mode)
-  - [ ] Implement Collision-Induced Throw (CIT)
-  - [ ] Refine Spin-Induced Throw (SIT) with speed/thickness scaling
-  - [ ] Implement Gear Effect (15% spin transfer)
-  - [ ] Implement precise Speed Transfer ($v_{object} = v_{cue} \cos(\theta)$)
-  - [ ] Implement Sliding-to-Rolling transition for Object Ball
-  - [ ] Add "Show Throw Vectors" debug toggle
-- [ ] UI Enhancements
-  - [ ] Add pocket markers for "Target Pocket" aiming geometry
+- [x] Physics Refinements (Expert Mode)
+  - [x] Implement Collision-Induced Throw (CIT)
+  - [x] Refine Spin-Induced Throw (SIT) with speed/thickness scaling
+  - [x] Implement Gear Effect (15% spin transfer)
+  - [x] Implement precise Speed Transfer ($v_{object} = v_{cue} \cos(\theta)$)
+  - [x] Implement Sliding-to-Rolling transition for Object Ball
+  - [x] Add "Show Throw Vectors" debug toggle
+- [x] UI Enhancements
+  - [x] Add pocket markers for "Target Pocket" aiming geometry
+- [ ] Visual Refinements
+  - [ ] Redesign 3D table with rails (cushions) and pockets
+  - [ ] Adjust table to 2:1 aspect ratio
+  - [ ] Fix Fine Tune Aim UI placement and styling
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository

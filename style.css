@@ -176,15 +176,41 @@ body, html {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 20px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 8px 12px;
+    bottom: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 15px;
     border-radius: 15px;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 50;
+    z-index: 100;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.fine-tune-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-tune {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-tune:active {
+    background: rgba(255,255,255,0.3);
 }
 
 .aim-buttons {
@@ -215,10 +241,15 @@ body, html {
 }
 
 #shoot-button {
-    bottom: 20px;
-    right: 10px;
+    bottom: 15px;
+    right: 15px;
     background: linear-gradient(135deg, #00ff88, #00cc66);
     color: #003311;
+}
+
+#reset-button {
+    top: 15px;
+    left: 15px;
 }
 
 #reset-button {

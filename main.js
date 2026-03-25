@@ -5,7 +5,8 @@ let aimAngle = 0; // Radians
 let english = { x: 0, y: 0 }; // Normalized -1 to 1
 let power = 50;
 const ballRadius = 0.5;
-const tableSize = 25;
+const tableWidth = 10;
+const tableLength = 20;
 
 // --- Three.js Setup ---
 const container = document.getElementById('canvas-container');
@@ -27,22 +28,51 @@ cameraTop.up.set(0, 0, -1);
 cameraTop.lookAt(0, 0, 0);
 
 // Set up table
-const floorGeo = new THREE.PlaneGeometry(tableSize, tableSize);
-const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a5c38, roughness: 0.8 });
+const floorGeo = new THREE.PlaneGeometry(tableWidth, tableLength);
+const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a5c38, roughness: 0.9, metalness: 0.1 });
 const floor = new THREE.Mesh(floorGeo, floorMat);
 floor.rotation.x = -Math.PI / 2;
+floor.receiveShadow = true;
 scene.add(floor);
+
+// Rails (Cushions)
+const railHeight = 0.4;
+const railWidth = 0.6;
+const railMat = new THREE.MeshStandardMaterial({ color: 0x3d2b1f, roughness: 0.5 }); // Dark wood
+
+function createRail(w, l, h, x, z, rotY = 0) {
+    const geo = new THREE.BoxGeometry(w, h, l);
+    const mesh = new THREE.Mesh(geo, railMat);
+    mesh.position.set(x, h/2, z);
+    mesh.rotation.y = rotY;
+    scene.add(mesh);
+}
+
+// Long Rails
+createRail(railWidth, tableLength, railHeight, -tableWidth/2 - railWidth/2, 0);
+createRail(railWidth, tableLength, railHeight, tableWidth/2 + railWidth/2, 0);
+// Short Rails
+createRail(tableWidth + railWidth*2, railWidth, railHeight, 0, -tableLength/2 - railWidth/2);
+createRail(tableWidth + railWidth*2, railWidth, railHeight, 0, tableLength/2 + railWidth/2);
+
+// Markings (Head Spot)
+const spotGeo = new THREE.CircleGeometry(0.1, 16);
+const spotMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.3 });
+const spot = new THREE.Mesh(spotGeo, spotMat);
+spot.rotation.x = -Math.PI / 2;
+spot.position.set(0, 0.001, tableLength/4);
+scene.add(spot);
 
 // Balls
 const ballGeo = new THREE.SphereGeometry(ballRadius, 32, 32);
-const cueMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+const cueMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 });
 const cueBall = new THREE.Mesh(ballGeo, cueMat);
-cueBall.position.set(0, ballRadius, 3);
+cueBall.position.set(0, ballRadius, tableLength/4);
 scene.add(cueBall);
 
-const objMat = new THREE.MeshStandardMaterial({ color: 0xffaa00 });
+const objMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, roughness: 0.2 });
 const objBall = new THREE.Mesh(ballGeo, objMat);
-objBall.position.set(0, ballRadius, -3);
+objBall.position.set(0, ballRadius, -tableLength/4);
 scene.add(objBall);
 
 const ghostBall = new THREE.Mesh(
@@ -79,9 +109,9 @@ document.getElementById('show-throw-vectors').onchange = (e) => {
 };
 
 const pockets = [
-    { x: -5, z: -10 }, { x: 5, z: -10 }, // Top
-    { x: -5, z: 0 }, { x: 5, z: 0 },   // Middle
-    { x: -5, z: 10 }, { x: 5, z: 10 }   // Bottom
+    { x: -tableWidth/2, z: -tableLength/2 }, { x: tableWidth/2, z: -tableLength/2 }, // Top
+    { x: -tableWidth/2, z: 0 }, { x: tableWidth/2, z: 0 },   // Middle
+    { x: -tableWidth/2, z: tableLength/2 }, { x: tableWidth/2, z: tableLength/2 }   // Bottom
 ];
 pockets.forEach(p => {
     const pocketGeo = new THREE.CircleGeometry(0.35, 32);
@@ -377,8 +407,8 @@ document.getElementById('aim-center').onclick = () => { aimAngle = 0; updateTraj
 document.getElementById('aim-right').onclick = () => { aimAngle -= 0.01; updateTrajectory(); }
 
 document.getElementById('reset-button').onclick = () => {
-    cueBall.position.set(0, ballRadius, 3);
-    objBall.position.set(0, ballRadius, -3);
+    cueBall.position.set(0, ballRadius, tableLength/4);
+    objBall.position.set(0, ballRadius, -tableLength/4);
     aimAngle = 0;
     english = { x: 0, y: 0 };
     document.getElementById('power-slider').value = 50;
