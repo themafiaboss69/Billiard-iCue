@@ -155,8 +155,33 @@ body, html {
     gap: 5px;
 }
 
+/* Ensure the middle row of the D-Pad (cross) is horizontal */
+.fine-tune-controls > div {
+    display: flex;
+    gap: 5px;
+}
+
+/* --- Aim Container --- */
+#aim-container {
+    position: absolute;
+    left: 10px;
+    bottom: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 15px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: row; /* Labels and buttons horizontal */
+    align-items: center;
+    gap: 15px;
+    z-index: 110;
+    border: 1px solid rgba(255,255,255,0.1);
+    transform: scale(0.8);
+    transform-origin: bottom left;
+}
+
 #aim-container .fine-tune-controls {
-    flex-direction: row; /* Horizontal override for Aim */
+    flex-direction: row; /* Horizontal override for Aim specifically */
     gap: 10px;
 }
 
