@@ -35,31 +35,25 @@ Build a web-based mobile-friendly application that serves as a Billiard cue ball
 #### [NEW] src/style.css
 - Mobile-first, absolute positioning for UI controls to float over the canvas.
 
-### Logic and Physics
-#### [NEW] src/main.js
+## Logic and Physics
+#### [NEW] main.js
 - **Three.js Initialization**: Scene, Lighting, Floor (table color), and two Spheres (Cue Ball, Object Ball).
 - **Dual Camera Setup**: 
-  - `camera3D`: Placed behind the cue ball, looking along the aim line.
-  - `cameraTop`: Orthographic camera looking straight down at the table.
-- **Physics Engine (V1)**:
-  - Calculate aiming vector.
-  - Perform ray/sphere intersection to find the "Ghost Ball" position (where the cue ball will be at the exact moment of impact).
-  - **Aim Line**: Draw a line from the Cue Ball to the Ghost Ball.
-  - **Object Ball Path**: Draw a straight line from the Object Ball along the collision normal (line of centers from Ghost Ball to Object Ball).
-  - **Cue Ball Post-Collision Path**: Calculate the tangent line (90 degrees from the collision normal). Modify this path based on the English parameters:
-    - Top English (Follow): Curve the trajectory forward.
-    - Bottom English (Draw): Curve the trajectory backward.
-    - Render this path as a curved/segmented line in Three.js.
-- **Animation Loop**: When "Shoot" is pressed, optionally animate the balls moving along these predicted paths to verify the math visually.
+  - `camera3D`: PerspectiveCamera behind the cue ball.
+  - `cameraTop`: Orthographic camera looking straight down with corrected `up` vector.
+- **Physics Engine (V2 - Dr. Dave Squirve)**:
+  - **Pre-Collision**: Frame-by-frame integrator for **Squirt** (deflection) and **Swerve** (curve).
+  - **Impact**: Collision detection based on the integrated path to find the curved impact point.
+  - **Object Ball**: Trajectory including **Spin-Induced Throw** (Gear Effect).
+  - **Cue Ball Post-Collision**: Physics-based velocity integration for backspin (draw) and forward spin (follow), with delayed swerve at high power.
+
+## Deployment & Sync
+- **PWA**: Added `manifest.json` and `sw.js` for mobile installation.
+- **GitHub**: Initialized Git repository and synced to private repo `Billiard-iCue`.
+- **Artifacts**: All project brain files included in the `.brain/` folder in the repository.
 
 ## Verification Plan
-
-### Automated Tests
-- Since this is highly visual and experimental, we will spin up the Vite dev server (`npm run dev`) and utilize the `read_browser_page` tool to verify the canvas mounts and there are no JS console errors.
-
-### Manual Verification
-1. Open the dev server URL in a browser with mobile emulation.
-2. Verify split-screen rendering (Top-down and 3D).
-3. Drag to aim: Verify the white aim line and ghost ball position update correctly as it sweeps past the object ball.
-4. Adjust English (e.g. max bottom spin): Verify the post-collision cue ball trajectory line bends backward.
-5. Hit "Shoot" to observe the balls follow the predicted lines.
+1. Open `http://localhost:8080` or the local IP `http://192.168.5.225:8080` on mobile.
+2. Verified perfect centering of English dot and balls.
+3. Verified power-based trajectory scaling and delay.
+4. Verified Dr. Dave's Squirve and Gear-Effect physics via expert review (Sharivari reference).
