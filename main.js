@@ -10,14 +10,22 @@ const tableLength = 20;
 
 // --- Three.js Setup ---
 const container = document.getElementById('canvas-container');
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.autoClear = false; // Required for scissor testing (split screen)
+
+// Resolution Scaling (Max 1080p for thermal efficiency)
+function updateResolution() {
+    const maxRes = 1080;
+    const currentRes = Math.max(window.innerWidth, window.innerHeight) * window.devicePixelRatio;
+    const scale = currentRes > maxRes ? maxRes / currentRes : 1;
+    renderer.setPixelRatio(window.devicePixelRatio * scale);
+}
+updateResolution();
+renderer.autoClear = false;
 container.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x111111);
+scene.background = new THREE.Color(0x050505);
 
 // Cameras
 const aspect = window.innerWidth / (window.innerHeight / 2);
@@ -27,18 +35,52 @@ cameraTop.position.set(0, 10, 0);
 cameraTop.up.set(0, 0, -1);
 cameraTop.lookAt(0, 0, 0);
 
-// Set up table
+// --- High-Performance Textures (Baked/Fake) ---
+// 1. Procedural Matcap (Simulates lighting/specular on balls)
+const matcapCanvas = document.createElement('canvas');
+matcapCanvas.width = 256; matcapCanvas.height = 256;
+const mCtx = matcapCanvas.getContext('2d');
+const grad = mCtx.createRadialGradient(100, 100, 10, 128, 128, 150);
+grad.addColorStop(0, '#ffffff'); // Specular highlight
+grad.addColorStop(0.2, '#eeeeee');
+grad.addColorStop(0.6, '#666666');
+grad.addColorStop(1, '#222222'); // Shadow
+mCtx.fillStyle = grad;
+mCtx.fillRect(0, 0, 256, 256);
+const matcapTexture = new THREE.CanvasTexture(matcapCanvas);
+
+// 2. Blob Shadow Texture
+const shadowCanvas = document.createElement('canvas');
+shadowCanvas.width = 128; shadowCanvas.height = 128;
+const sCtx = shadowCanvas.getContext('2d');
+const sGrad = sCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
+sGrad.addColorStop(0, 'rgba(0,0,0,0.6)');
+sGrad.addColorStop(1, 'rgba(0,0,0,0)');
+sCtx.fillStyle = sGrad;
+sCtx.fillRect(0, 0, 128, 128);
+const shadowTexture = new THREE.CanvasTexture(shadowCanvas);
+
+// --- Table Design (Unlit/Baked) ---
+// Floor with fake baked light falloff
 const floorGeo = new THREE.PlaneGeometry(tableWidth, tableLength);
-const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a5c38, roughness: 0.9, metalness: 0.1 });
+const floorCanvas = document.createElement('canvas');
+floorCanvas.width = 512; floorCanvas.height = 512;
+const fCtx = floorCanvas.getContext('2d');
+const fGrad = fCtx.createRadialGradient(256, 256, 100, 256, 256, 400);
+fGrad.addColorStop(0, '#1a5c38');
+fGrad.addColorStop(1, '#0d2e1c');
+fCtx.fillStyle = fGrad;
+fCtx.fillRect(0, 0, 512, 512);
+const floorTexture = new THREE.CanvasTexture(floorCanvas);
+const floorMat = new THREE.MeshBasicMaterial({ map: floorTexture });
 const floor = new THREE.Mesh(floorGeo, floorMat);
 floor.rotation.x = -Math.PI / 2;
-floor.receiveShadow = true;
 scene.add(floor);
 
-// Rails (Cushions)
+// Rails (Unlit Wood)
 const railHeight = 0.4;
 const railWidth = 0.6;
-const railMat = new THREE.MeshStandardMaterial({ color: 0x3d2b1f, roughness: 0.5 }); // Dark wood
+const railMat = new THREE.MeshBasicMaterial({ color: 0x221811 }); // Darker, flat wood
 
 function createRail(w, l, h, x, z, rotY = 0) {
     const geo = new THREE.BoxGeometry(w, h, l);
@@ -63,22 +105,37 @@ spot.rotation.x = -Math.PI / 2;
 spot.position.set(0, 0.001, tableLength/4);
 scene.add(spot);
 
-// Balls
+// --- Balls & Shadows ---
 const ballGeo = new THREE.SphereGeometry(ballRadius, 32, 32);
-const cueMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 });
-const cueBall = new THREE.Mesh(ballGeo, cueMat);
-cueBall.position.set(0, ballRadius, tableLength/4);
-scene.add(cueBall);
+const shadowGeo = new THREE.PlaneGeometry(ballRadius * 2.5, ballRadius * 2.5);
+const shadowMat = new THREE.MeshBasicMaterial({ map: shadowTexture, transparent: true, depthWrite: false });
 
-const objMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, roughness: 0.2 });
-const objBall = new THREE.Mesh(ballGeo, objMat);
-objBall.position.set(0, ballRadius, -tableLength/4);
-scene.add(objBall);
+function createBall(color, posZ) {
+    const group = new THREE.Group();
+    const mesh = new THREE.Mesh(ballGeo, new THREE.MeshMatcapMaterial({ color: color, matcap: matcapTexture }));
+    mesh.position.y = ballRadius;
+    group.add(mesh);
+    
+    const shadow = new THREE.Mesh(shadowGeo, shadowMat);
+    shadow.rotation.x = -Math.PI / 2;
+    shadow.position.y = 0.002; // Just above floor
+    group.add(shadow);
+    
+    group.position.z = posZ;
+    scene.add(group);
+    return { group, mesh, shadow };
+}
+
+const cueBallObj = createBall(0xffffff, tableLength/4);
+const cueBall = cueBallObj.group;
+const objBallObj = createBall(0xffaa00, -tableLength/4);
+const objBall = objBallObj.group;
 
 const ghostBall = new THREE.Mesh(
     new THREE.SphereGeometry(ballRadius, 32, 32),
     new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 })
 );
+ghostBall.position.set(0, ballRadius, 0);
 scene.add(ghostBall);
 
 // Trajectory Lines
@@ -94,13 +151,6 @@ scene.add(aimLineObj);
 scene.add(objLineObj);
 scene.add(cueLineObj);
 scene.add(naturalLineObj);
-
-// Lights
-const ambient = new THREE.AmbientLight(0xffffff, 0.5);
-scene.add(ambient);
-const light = new THREE.PointLight(0xffffff, 0.8);
-light.position.set(0, 10, 0);
-scene.add(light);
 
 let showThrowVectors = false;
 document.getElementById('show-throw-vectors').onchange = (e) => {
@@ -446,6 +496,7 @@ function animate() {
 
 // Window resize handling
 window.addEventListener('resize', () => {
+    updateResolution();
     const w = window.innerWidth;
     const h = window.innerHeight;
     renderer.setSize(w, h);

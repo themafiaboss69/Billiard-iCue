@@ -30,10 +30,17 @@
   - [x] Add "Show Throw Vectors" debug toggle
 - [x] UI Enhancements
   - [x] Add pocket markers for "Target Pocket" aiming geometry
-- [ ] Visual Refinements
-  - [ ] Redesign 3D table with rails (cushions) and pockets
-  - [ ] Adjust table to 2:1 aspect ratio
-  - [ ] Fix Fine Tune Aim UI placement and styling
+- [x] Visual Refinements
+  - [x] Redesign 3D table with rails (cushions) and pockets
+  - [x] Adjust table to 2:1 aspect ratio
+  - [x] Fix Fine Tune Aim UI placement and styling
+- [ ] GPU Optimization (Mobile)
+  - [ ] Implement Resolution Scaling (Max 1080p pixel ratio)
+  - [ ] Disable all Real-Time Lights
+  - [ ] Use Baked 'Unlit' Materials for table (MeshBasicMaterial)
+  - [ ] Implement Blob Shadows for balls (Sprite-based)
+  - [ ] Implement Matcap Reflections for balls (Fake specular)
+  - [ ] Implement Texture Batching (Atlas simulation)
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository

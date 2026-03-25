@@ -52,8 +52,23 @@ Build a web-based mobile-friendly application that serves as a Billiard cue ball
 - **GitHub**: Initialized Git repository and synced to private repo `Billiard-iCue`.
 - **Artifacts**: All project brain files included in the `.brain/` folder in the repository.
 
+## GPU Optimization (Mobile Fidelity)
+To ensure high performance and low thermal load on mobile, we will transition to an "Unlit Baked" rendering pipeline:
+
+### 1. Light-Free Environment
+- **Action**: Delete all `THREE.Light` objects.
+- **Table**: Replace `MeshStandardMaterial` with `MeshBasicMaterial`. The green gradient for light falloff will be procedural or baked into a `CanvasTexture`.
+- **Cushions**: Use a wood-color gradient in `MeshBasicMaterial`.
+
+### 2. Blob Shadows & Fake Reflections
+- **Blob Shadows**: A circular `MeshBasicMaterial` plane with a radial alpha alpha-gradient (black center to 0.0 outer) will follow the balls.
+- **Matcap Material**: A 2D "Matcap" texture (simulating a lit sphere) will be applied to the balls via `MeshMatcapMaterial`. This provides high-quality highlights without any real lights.
+
+### 3. Resolution & Throughput
+- **Resolution Scaling**: `renderer.setPixelRatio` will be clamped: `Math.min(window.devicePixelRatio, 1080 / Math.max(window.innerWidth, window.innerHeight))`.
+- **Batching**: Use shared `MeshBasicMaterial` instances to minimize state changes.
+
 ## Verification Plan
-1. Open `http://localhost:8080` or the local IP `http://192.168.5.225:8080` on mobile.
-2. Verified perfect centering of English dot and balls.
-3. Verified power-based trajectory scaling and delay.
-4. Verified Dr. Dave's Squirve and Gear-Effect physics via expert review (Sharivari reference).
+1. Confirm the scene renders without any lights (all materials should be `MeshBasic` or `MeshMatcap`).
+2. Verify blob shadows move smoothly under balls.
+3. Check performance on a mobile device (low GPU usage).
