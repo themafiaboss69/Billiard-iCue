@@ -9,8 +9,8 @@ I've implemented the V1 Billiard physics guide using Vanilla JavaScript and **Th
    - Added **3D Wood Rails** (cushions) that create a physical boundary for the scene.
    - Includes **Pockets** and the **Head Spot** marking for authentic alignment.
 2. **Optimized UI Layout**:
-   - **English (Spin)**: Moved to the **bottom-center** position. Being the most used control, it now sits right under the tactical view.
-   - **Fine Tune Aim**: Moved to the **bottom-left** corner and reduced in size (`0.75x`) to prevent it from blocking the view.
+   - **English (Spin)**: Moved to the **top-center** but redesigned as a **compact horizontal bar**. This keeps the spin controls accessible while significantly reducing vertical blockage.
+   - **Fine Tune Aim**: Moved to the **bottom-left** side. This clears the central "ball area" in both views.
    - **Action Buttons**: `RESET` (top-left) and `SHOOT` (bottom-right) are placed at the corners for ergonomic reach on mobile devices.
 3. **Dual-Screen Layout**: 
    - The top half displays the 3D view; the bottom half displays the top-down tactical view.
