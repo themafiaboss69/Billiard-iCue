@@ -278,7 +278,7 @@ function updateTrajectory() {
 
     const aimDir = stickDir.clone().normalize();
     const up = new THREE.Vector3(0, 1, 0);
-    const powerFactor = power / 50.0;
+    const powerFactor = power / 100.0; // Recalibrated for human strength (v11)
     
     // --- Pre-Collision Path (Squirt & Swerve / Dr. Dave Physics) ---
     // Squirt (Deflection): Ball initially travels opposite to side spin

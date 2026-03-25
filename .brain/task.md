@@ -50,9 +50,10 @@
   - [x] Implement Procedural Cue Stick (Lerp/Easing)
   - [x] Implement True-Roll Ball Rotation (Quaternions, $v=r\omega$)
   - [x] Implement VFX Object Pool (Chalk Dust, Sparks)
-- [x] UI Restoration (v9)
+- [x] UI Restoration & Power Scaling (v11)
   - [x] Restore Aim menu to bottom-left
   - [x] Restore English D-Pad cross layout
+  - [x] Recalibrate power factor for human strength (/100.0)
 - [x] Verification
 - [x] Deployment & Sync
   - [x] Initialize Git repository
