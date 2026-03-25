@@ -45,8 +45,10 @@ const objBall = new THREE.Mesh(ballGeo, objMat);
 objBall.position.set(0, ballRadius, -3);
 scene.add(objBall);
 
-const ghostBallMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
-const ghostBall = new THREE.Mesh(ballGeo, ghostBallMat);
+const ghostBall = new THREE.Mesh(
+    new THREE.SphereGeometry(ballRadius, 32, 32),
+    new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 })
+);
 scene.add(ghostBall);
 
 // Trajectory Lines
@@ -57,9 +59,11 @@ const lineMatRed = new THREE.LineBasicMaterial({ color: 0xff4444, linewidth: 3 }
 const aimLineObj = new THREE.Line(new THREE.BufferGeometry(), lineMatWhite);
 const objLineObj = new THREE.Line(new THREE.BufferGeometry(), lineMatYellow);
 const cueLineObj = new THREE.Line(new THREE.BufferGeometry(), lineMatRed);
+const naturalLineObj = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.2 }));
 scene.add(aimLineObj);
 scene.add(objLineObj);
 scene.add(cueLineObj);
+scene.add(naturalLineObj);
 
 // Lights
 const ambient = new THREE.AmbientLight(0xffffff, 0.5);
@@ -67,6 +71,68 @@ scene.add(ambient);
 const light = new THREE.PointLight(0xffffff, 0.8);
 light.position.set(0, 10, 0);
 scene.add(light);
+
+let showThrowVectors = false;
+document.getElementById('show-throw-vectors').onchange = (e) => {
+    showThrowVectors = e.target.checked;
+    updateTrajectory();
+};
+
+const pockets = [
+    { x: -5, z: -10 }, { x: 5, z: -10 }, // Top
+    { x: -5, z: 0 }, { x: 5, z: 0 },   // Middle
+    { x: -5, z: 10 }, { x: 5, z: 10 }   // Bottom
+];
+pockets.forEach(p => {
+    const pocketGeo = new THREE.CircleGeometry(0.35, 32);
+    const pocketMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.5 });
+    const pocket = new THREE.Mesh(pocketGeo, pocketMat);
+    pocket.rotation.x = -Math.PI / 2;
+    pocket.position.set(p.x, 0.001, p.z);
+    pocket.userData.isPocket = true;
+    scene.add(pocket);
+});
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+window.addEventListener('mousedown', onMouseDown);
+window.addEventListener('touchstart', (e) => { if(e.touches.length > 0) onMouseDown(e.touches[0]); });
+
+function onMouseDown(event) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    
+    // Choose camera based on click position
+    const cam = event.clientY > window.innerHeight / 2 ? cameraTop : camera3D;
+    raycaster.setFromCamera(mouse, cam);
+    
+    const intersects = raycaster.intersectObjects(scene.children);
+    for (let intersect of intersects) {
+        if (intersect.object.userData.isPocket) {
+            autoAimToPocket(intersect.object.position);
+            return;
+        }
+    }
+}
+
+function autoAimToPocket(pocketPos) {
+    // User's Ghost Ball logic
+    const dx = pocketPos.x - objBall.position.x;
+    const dz = pocketPos.z - objBall.position.z;
+    const dist = Math.hypot(dx, dz);
+    const dirX = dx / dist;
+    const dirZ = dz / dist;
+    
+    const ghostX = objBall.position.x - (dirX * ballRadius * 2);
+    const ghostZ = objBall.position.z - (dirZ * ballRadius * 2);
+    
+    const aimDx = ghostX - cueBall.position.x;
+    const aimDz = ghostZ - cueBall.position.z;
+    aimAngle = Math.atan2(aimDx, -aimDz);
+    updateTrajectory();
+}
 
 // --- Math & Trajectory Calculation ---
 function updateTrajectory() {
@@ -127,46 +193,66 @@ function updateTrajectory() {
         ghostBall.position.copy(ghostPos);
         ghostBall.visible = true;
         
-        // Effective aim direction is the curve's tangent at impact
-        const effectiveAimDir = currentPreVelocity.clone().normalize();
+        // --- Object Ball Physics (SIT, CIT, CIT-Deviation) ---
         const collisionNormal = new THREE.Vector3().subVectors(objBall.position, ghostPos).normalize();
         
-        // Object ball line (Spin-Induced Throw)
-        // Left spin (-x) throws object ball Right (negative angle in ThreeJs space).
-        const cutFactor = Math.abs(effectiveAimDir.dot(collisionNormal)); 
-        const throwAngle = english.x * cutFactor * (6 * Math.PI / 180); 
-        const objDir = collisionNormal.clone().applyAxisAngle(up, throwAngle).normalize();
+        // 1. Collision-Induced Throw (CIT): Friction towards the cue ball's tangent
+        // 2. Spin-Induced Throw (SIT): Friction opposite to cue ball's side spin
+        const cutFactor = Math.abs(effectiveAimDir.dot(collisionNormal)); // 1.0 = straight, 0.0 = paper thin
         
-        objPathEnd.copy(objBall.position).addScaledVector(objDir, 10 * powerFactor);
+        // SIT is maximized at slow speeds and thicker hits
+        const sitStrength = (1.0 / (0.5 + currentPreVelocity.length())) * cutFactor;
+        const sitAngle = english.x * sitStrength * (6 * Math.PI / 180); 
+        
+        // CIT: Slight deviation (1-3 degrees) in the direction of the cut
+        const citDirection = new THREE.Vector3().crossVectors(collisionNormal, up).normalize();
+        const citSign = effectiveAimDir.dot(citDirection) > 0 ? 1 : -1;
+        const citAngle = citSign * (1.5 * Math.PI / 180); // Fixed 1.5 deg for now
+        
+        const finalThrowAngle = sitAngle + citAngle;
+        const objDir = collisionNormal.clone().applyAxisAngle(up, finalThrowAngle).normalize();
+        
+        // Speed Transfer: v_object = v_cue * cos(theta)
+        const vCuePre = currentPreVelocity.length();
+        const cosTheta = Math.abs(effectiveAimDir.dot(collisionNormal));
+        const vObjPost = vCuePre * cosTheta;
+        
+        objPathEnd.copy(objBall.position).addScaledVector(objDir, 10 * (vObjPost / 2.0));
         objLineObj.geometry.setFromPoints([objBall.position, objPathEnd]);
         
-        // Cue ball post-collision line (Stun + Swerve/Draw/Follow)
+        // Debug Vectors
+        if (showThrowVectors) {
+            // Natural path (Line of Centers)
+            const naturalPathEnd = objBall.position.clone().addScaledVector(collisionNormal, 10 * (vObjPost / 2.0));
+            naturalLineObj.geometry.setFromPoints([objBall.position, naturalPathEnd]);
+            naturalLineObj.visible = true;
+        } else {
+            naturalLineObj.visible = false;
+        }
+
+        // --- Cue Ball Post-Collision line (Stun + Swerve/Draw/Follow) ---
         let tangent1 = new THREE.Vector3().crossVectors(up, collisionNormal).normalize();
         let tangent2 = new THREE.Vector3().crossVectors(collisionNormal, up).normalize();
         let tangentDir = tangent1.dot(effectiveAimDir) > tangent2.dot(effectiveAimDir) ? tangent1 : tangent2;
         
-        const cutDot = effectiveAimDir.dot(collisionNormal);
-        const stunSpeed = Math.sqrt(Math.max(0, 1 - cutDot * cutDot)); 
+        const stunSpeed = Math.sqrt(Math.max(0, 1 - cosTheta * cosTheta)) * vCuePre; 
         
         cuePathPoints.push(ghostPos.clone());
         let currentPos = ghostPos.clone();
         
-        // Post-collision residual velocity
-        let residualRatio = currentPreVelocity.length() / (2.0 * powerFactor); 
-        let currentVelocity = tangentDir.clone().multiplyScalar(stunSpeed * 1.5 * powerFactor * residualRatio);
+        // Initial velocity is EXACTLY on the tangent line (90 degrees)
+        let currentVelocity = tangentDir.clone().multiplyScalar(stunSpeed);
         
-        // Spin friction force is constant cloth grip! Unaffected by initial speed.
+        // Spin friction force is constant cloth grip!
         let spinForceY = effectiveAimDir.clone().multiplyScalar(english.y * 0.15);
-        let spinForceX = trueRightDir.clone().multiplyScalar(english.x * 0.08); // Left english (-x) pulls Left.
+        let spinForceX = trueRightDir.clone().multiplyScalar(english.x * 0.08); 
         let spinForce = new THREE.Vector3().addVectors(spinForceY, spinForceX);
         
         for (let i = 1; i <= 150; i++) {
             currentVelocity.add(spinForce);
             currentPos.addScaledVector(currentVelocity, 0.5);
             
-            // Critical physics simulation: Tangent sliding friction stops the ball FAST.
             currentVelocity.multiplyScalar(0.85); 
-            // Rotating spin friction persists LONGER, allowing the spin to violently "catch" and snap the curve!
             spinForce.multiplyScalar(0.96);
             
             if (currentVelocity.lengthSq() < 0.001 && spinForce.lengthSq() < 0.001) break;

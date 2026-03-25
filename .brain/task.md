@@ -21,9 +21,16 @@
 - [x] Graphics & Rendering
   - [x] Render the trajectory lines (aim line, cue ball path, object ball path)
   - [x] Basic 3D/2D rendering of the table and balls
+- [ ] Physics Refinements (Expert Mode)
+  - [ ] Implement Collision-Induced Throw (CIT)
+  - [ ] Refine Spin-Induced Throw (SIT) with speed/thickness scaling
+  - [ ] Implement Gear Effect (15% spin transfer)
+  - [ ] Implement precise Speed Transfer ($v_{object} = v_{cue} \cos(\theta)$)
+  - [ ] Implement Sliding-to-Rolling transition for Object Ball
+  - [ ] Add "Show Throw Vectors" debug toggle
+- [ ] UI Enhancements
+  - [ ] Add pocket markers for "Target Pocket" aiming geometry
 - [x] Verification
-  - [x] Test the interface on mobile dimensions
-  - [x] Verify physics logic
 - [x] Deployment & Sync
   - [x] Initialize Git repository
   - [x] Create private GitHub repository "Billiard-iCue"

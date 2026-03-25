@@ -58,12 +58,16 @@
         <!-- Aim Fine Tune -->
         <div id="aim-container">
             <div class="control-label">Fine Tune Aim</div>
-            <div class="aim-buttons">
-                <button id="aim-left" class="btn-tune">◀</button>
-                <button id="aim-center" class="btn-tune">●</button>
-                <button id="aim-right" class="btn-tune">▶</button>
-            </div>
+            <div class="fine-tune-controls">
+            <button id="aim-left">←</button>
+            <button id="aim-center">●</button>
+            <button id="aim-right">→</button>
         </div>
+        <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px; color: white; font-size: 14px;">
+            <input type="checkbox" id="show-throw-vectors" style="width: 18px; height: 18px;">
+            <label for="show-throw-vectors">Show Throw Vectors</label>
+        </div>
+    </div>
 
         <!-- Shoot Button -->
         <button id="shoot-button">SHOOT</button>
