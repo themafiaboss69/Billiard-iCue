@@ -440,7 +440,8 @@ function updateCameras() {
     const centerZ = (cueBall.position.z + objBall.position.z) / 2;
     const centerX = (cueBall.position.x + objBall.position.x) / 2;
     
-    const verticalNeeded = Math.max(12, dist + 8); // Slightly more padding for larger balls    const halfV = verticalNeeded / 2;
+    const verticalNeeded = Math.max(12, dist + 8); // Slightly more padding for larger balls
+    const halfV = verticalNeeded / 2;
     const aspect = window.innerWidth / (window.innerHeight / 2);
     const halfH = Math.max(6, halfV * aspect);
     
