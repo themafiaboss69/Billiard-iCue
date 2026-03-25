@@ -65,19 +65,18 @@ body, html {
 /* --- English Control --- */
 #english-container {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 10px;
+    right: 15px;
+    top: 15px;
     background: rgba(0, 0, 0, 0.4);
-    padding: 6px 12px;
+    padding: 8px 12px;
     border-radius: 20px;
     backdrop-filter: blur(5px);
     display: flex;
-    flex-direction: row; /* Horizontal for top placement */
+    flex-direction: row;
     align-items: center;
-    gap: 15px;
-    transform: scale(0.7);
-    transform-origin: top center;
+    gap: 12px;
+    transform: scale(0.65);
+    transform-origin: top right;
     z-index: 100;
     border: 1px solid rgba(255,255,255,0.05);
 }
