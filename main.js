@@ -554,17 +554,17 @@ document.getElementById('aim-left').onclick = () => { aimAngle -= 0.01; updateTr
 document.getElementById('aim-center').onclick = () => { aimAngle = 0; updateTrajectory(); }
 document.getElementById('aim-right').onclick = () => { aimAngle += 0.01; updateTrajectory(); }
 
-// Distance Presets (v15)
+// Distance Presets — move OBJECT ball, cue ball stays fixed (v21)
 document.getElementById('dist-near').onclick = () => { 
-    cueBall.position.z = objBall.position.z + 5; 
+    objBall.position.z = cueBall.position.z - 5;   // object ball close to cue ball
     updateTrajectory(); 
 }
 document.getElementById('dist-med').onclick = () => { 
-    cueBall.position.z = objBall.position.z + 12.5; 
+    objBall.position.z = cueBall.position.z - 12.5; // object ball mid-distance
     updateTrajectory(); 
 }
 document.getElementById('dist-far').onclick = () => { 
-    cueBall.position.z = objBall.position.z + 24; 
+    objBall.position.z = cueBall.position.z - 16;  // object ball far from cue ball
     updateTrajectory(); 
 }
 
